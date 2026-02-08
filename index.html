@@ -493,6 +493,21 @@
             line-height: 1.8;
         }
 
+        /* Interactive Map */
+        .map-section {
+            padding: 100px 20px;
+            background: linear-gradient(180deg, #000 0%, #0f3460 100%);
+        }
+
+        #interactive-map {
+            max-width: 1400px;
+            margin: 50px auto 0;
+            height: 600px;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 30px 100px rgba(255, 107, 157, 0.3);
+        }
+
         /* Counter Animated */
         .counter-section {
             padding: 100px 20px;
@@ -671,7 +686,6 @@
             margin-bottom: 50px;
         }
 
-        /* Music Player */
         /* Responsive */
         @media (max-width: 768px) {
             .cinematic-title {
@@ -979,7 +993,7 @@
     </section>
 
     <!-- Quiz Interactivo -->
-    <section class="quiz-section" id="quizSection">
+    <section class="quiz-section" id="quizSection" style="display: none;">
         <div class="quiz-container">
             <h2 class="quiz-title">¿Cuánto Sabes de Nosotros?</h2>
             <div id="quizContent"></div>
@@ -1024,11 +1038,11 @@
                 <div class="stat-label">Días Juntos 🌅</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number" id="stat2">118,089</div>
+                <div class="stat-number" id="stat2">15,789</div>
                 <div class="stat-label">Mensajes de Amor 💬</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number" id="stat3">4,219</div>
+                <div class="stat-number" id="stat3">387</div>
                 <div class="stat-label">"Te Amo" Dichos ❤️</div>
             </div>
             <div class="stat-card">
@@ -1050,8 +1064,8 @@
                     <div class="timeline-date">13 de Julio, 2025</div>
                     <h3 class="timeline-event-title">Todo Comenzó en Instagram</h3>
                     <p class="timeline-description">
-                        Te respondí una historia de tu cuadro de Junior H. Un comentario simple que se convirtió 
-                        en la mejor conversación de mi vida. Desde ese día supe que eras diferente.
+                        Un DM, una conversación, una conexión instantánea. Desde ese día supe que eras diferente.
+                        No sabía que un simple mensaje cambiaría mi vida para siempre.
                     </p>
                 </div>
             </div>
@@ -1062,10 +1076,10 @@
                 </div>
                 <div class="timeline-content">
                     <div class="timeline-date">28 de Julio, 2025</div>
-                    <h3 class="timeline-event-title">Pasamos a WhatsApp</h3>
+                    <h3 class="timeline-event-title">El Primer "Holiiii" en WhatsApp</h3>
                     <p class="timeline-description">
-                        Nuestra conversación se mudó a WhatsApp. Hablamos hasta la 1 AM sin darnos cuenta del tiempo. 
-                        Desde ese momento cada "buenos días preciosa" se volvió parte de mi rutina favorita.
+                        Nuestra conversación se mudó a WhatsApp. Hablamos hasta la 1 AM y desde ese momento 
+                        cada "buenos días preciosa" se volvió parte de mi rutina favorita.
                     </p>
                 </div>
             </div>
@@ -1090,25 +1104,11 @@
                     <div class="timeline-image-placeholder">❤️</div>
                 </div>
                 <div class="timeline-content">
-                    <div class="timeline-date">2 de Agosto, 2025 - 9:10 PM</div>
+                    <div class="timeline-date">2 de Agosto, 2025</div>
                     <h3 class="timeline-event-title">El Primer "Te Amo"</h3>
                     <p class="timeline-description">
-                        "Te amoo" - Fuiste tú quien lo dijo primero. Ese mensaje cambió todo. 
-                        Desde ese día, "Te amo" dejó de ser solo una frase para convertirse en nuestra promesa.
-                    </p>
-                </div>
-            </div>
-
-            <div class="timeline-event" data-scroll>
-                <div class="timeline-image">
-                    <div class="timeline-image-placeholder">🎭</div>
-                </div>
-                <div class="timeline-content">
-                    <div class="timeline-date">7 de Agosto, 2025</div>
-                    <h3 class="timeline-event-title">Nuestra Primera Cita</h3>
-                    <p class="timeline-description">
-                        Palacio de la Música y después el Parque de la Plancha. El día que dejamos de ser solo mensajes 
-                        para convertirnos en miradas, sonrisas y momentos reales. Desde ese día supe que esto era especial.
+                        El día que nuestros corazones hablaron más fuerte que las palabras. 
+                        "Te amo" dejó de ser solo una frase para convertirse en una promesa.
                     </p>
                 </div>
             </div>
@@ -1142,8 +1142,8 @@
                         <span>01</span>
                     </div>
                     <div class="flip-card-back">
-                        <h3>Tus Ojos</h3>
-                        <p>Tienen algo especial que me desarma. Cuando me miras, siento que puedo ver tu alma. Tus ojos dicen más que mil palabras y me enamoran cada vez que los veo.</p>
+                        <h3>Tu Forma de Ser</h3>
+                        <p>Desde el primer día me dijiste "para ti nunca" cuando pensé que estabas ocupada. Ese detalle me hizo darme cuenta de lo especial que eres.</p>
                     </div>
                 </div>
             </div>
@@ -1154,8 +1154,8 @@
                         <span>02</span>
                     </div>
                     <div class="flip-card-back">
-                        <h3>Tu Forma de Amar</h3>
-                        <p>"Cesarr emiliano garcia entiendeeee que yo te amoo infinitamente desde el primer dia te lo demostre con un kiss✨, eres lo más bonito de este año y de los que siguen."</p>
+                        <h3>Cómo Me Haces Sentir</h3>
+                        <p>"Me encantass más a mii, te amoo mucho niño lindo" - cada mensaje tuyo me hace sentir el hombre más afortunado del mundo.</p>
                     </div>
                 </div>
             </div>
@@ -1166,8 +1166,8 @@
                         <span>03</span>
                     </div>
                     <div class="flip-card-back">
-                        <h3>Tu Sonrisa</h3>
-                        <p>Tu sonrisa ilumina hasta mis días más oscuros. Cuando sonríes, el mundo entero se detiene. Haría cualquier cosa por verte sonreír así cada día.</p>
+                        <h3>Tus Detalles</h3>
+                        <p>Preguntas "¿Ya desayunaste?", "¿Cómo amaneciste?" - esos pequeños detalles que demuestran cuánto te importo.</p>
                     </div>
                 </div>
             </div>
@@ -1178,8 +1178,8 @@
                         <span>04</span>
                     </div>
                     <div class="flip-card-back">
-                        <h3>Que Siempre Eres Sincera</h3>
-                        <p>Siempre me dices lo que sientes, sin filtros, sin miedo. Tu honestidad y transparencia son cosas que admiro profundamente. Contigo todo es real.</p>
+                        <h3>Tu Sinceridad</h3>
+                        <p>Siempre tratando de expresar todo lo que sientes. Tu honestidad y transparencia son cosas que admiro profundamente.</p>
                     </div>
                 </div>
             </div>
@@ -1190,8 +1190,8 @@
                         <span>05</span>
                     </div>
                     <div class="flip-card-back">
-                        <h3>Eres Mi Persona Favorita</h3>
-                        <p>"Eres mi persona favorita, eres todo lo que quiero para siempre amor mioo". Esas palabras tuyas se quedaron grabadas en mi corazón para siempre.</p>
+                        <h3>Nuestra Conexión</h3>
+                        <p>Eres de las pocas personas con las que he coincidido en demasiadas cosas. Hablamos hasta el amanecer sin darnos cuenta del tiempo.</p>
                     </div>
                 </div>
             </div>
@@ -1214,9 +1214,6 @@
     <section class="typewriter-section">
         <div class="typewriter-container">
             <div class="typewriter-text" id="typewriterText"></div>
-            <p style="text-align: center; font-size: 1.3rem; font-weight: 700; margin-top: 50px; letter-spacing: 2px; color: #ff6b9d;">
-                ES ALGO QUE DIJE, LO SOSTENGO Y SIEMPRE LO HARÉ
-            </p>
         </div>
     </section>
 
@@ -1230,7 +1227,7 @@
                 Esta presentación es solo un pequeño reflejo de lo que siento por ti.<br><br>
                 <strong>Eres mi para siempre.</strong>
             </p>
-
+            
             <button class="valentine-reveal-btn" onclick="revealValentineProposal()">
                 Hay algo más... 💕
             </button>
@@ -1483,8 +1480,8 @@
                 if (entry.isIntersecting) {
                     // Animar números
                     animateNumber('stat1', 209);
-                    animateNumber('stat2', 118089);
-                    animateNumber('stat3', 4219);
+                    animateNumber('stat2', 15789);
+                    animateNumber('stat3', 387);
                     
                     // Inicializar gráficas
                     setTimeout(() => {
@@ -1504,6 +1501,91 @@
         }
 
         // ==================== CHARTS ====================
+        let chartsInitialized = false;
+
+        function initCharts() {
+            if (chartsInitialized) return;
+            chartsInitialized = true;
+
+            // Monthly Chart
+            const ctx1 = document.getElementById('monthlyChart');
+            if (ctx1) {
+                new Chart(ctx1.getContext('2d'), {
+                    type: 'line',
+                    data: {
+                        labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+                        datasets: [{
+                            label: 'Felicidad',
+                            data: [65, 85, 90, 81, 95, 88, 92, 97, 89, 94, 96, 99],
+                            borderColor: '#ff6b9d',
+                            backgroundColor: 'rgba(255, 107, 157, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { 
+                            legend: { display: false },
+                            tooltip: { enabled: true }
+                        },
+                        scales: {
+                            y: { 
+                                display: false,
+                                beginAtZero: true
+                            },
+                            x: { 
+                                display: true, 
+                                grid: { display: false },
+                                ticks: { color: 'rgba(255, 255, 255, 0.7)' }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Activities Chart
+            const ctx2 = document.getElementById('activitiesChart');
+            if (ctx2) {
+                new Chart(ctx2.getContext('2d'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Cenas', 'Películas', 'Viajes', 'Paseos', 'Otros'],
+                        datasets: [{
+                            data: [30, 25, 20, 15, 10],
+                            backgroundColor: ['#ff6b9d', '#c06c84', '#f67280', '#feca57', '#48dbfb'],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { 
+                            legend: { 
+                                display: true,
+                                position: 'bottom',
+                                labels: {
+                                    color: 'rgba(255, 255, 255, 0.8)',
+                                    padding: 10,
+                                    font: { size: 11 }
+                                }
+                            },
+                            tooltip: { 
+                                enabled: true,
+                                callbacks: {
+                                    label: function(context) {
+                                        return context.label + ': ' + context.parsed + '%';
+                                    }
+                                }
+                            }
+                        },
+                        cutout: '60%'
+                    }
+                });
+            }
+        }
+
         // ==================== PARALLAX TIMELINE ====================
         const timelineObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -1516,6 +1598,33 @@
         document.querySelectorAll('[data-scroll]').forEach(el => {
             timelineObserver.observe(el);
         });
+
+        // ==================== MAP ====================
+        setTimeout(() => {
+            const map = L.map('interactive-map').setView([20.9674, -89.6244], 11);
+            
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                attribution: '© OpenStreetMap contributors © CARTO'
+            }).addTo(map);
+
+            const lugares = [
+                { coords: [20.9674, -89.6244], nombre: '💕 Primer Encuentro', desc: 'Café del Centro - Donde todo comenzó' },
+                { coords: [20.9850, -89.6170], nombre: '🌙 Primera Cita', desc: 'Restaurante bajo las estrellas' },
+                { coords: [20.9970, -89.6250], nombre: '💋 Nos Hicimos Novios', desc: 'Parque de las Américas - El día perfecto' },
+                { coords: [21.1619, -86.8515], nombre: '✈️ Cancún', desc: 'Nuestro primer viaje juntos' }
+            ];
+
+            lugares.forEach(lugar => {
+                const customIcon = L.divIcon({
+                    html: '<div style="background: linear-gradient(135deg, #ff6b9d, #c06c84); width: 30px; height: 30px; border-radius: 50%; border: 3px solid white; box-shadow: 0 5px 15px rgba(255, 107, 157, 0.5);"></div>',
+                    className: '',
+                    iconSize: [30, 30]
+                });
+
+                const marker = L.marker(lugar.coords, { icon: customIcon }).addTo(map);
+                marker.bindPopup(`<div style="text-align: center; padding: 10px;"><strong style="color: #ff6b9d; font-size: 1.1rem;">${lugar.nombre}</strong><br><span style="color: #666;">${lugar.desc}</span></div>`);
+            });
+        }, 2000);
 
         // ==================== TYPEWRITER EFFECT ====================
         const typewriterText = "Ahorita te he agarrado demasiado cariño y la verdad sí quiero un futuro contigo. Eres de las pocas personas en las que he coincidido en demasiadas cosas y eso me encanta. Contigo quiero hacer las cosas bien porque de verdad vales la pena. Te quiero mucho.";
