@@ -925,15 +925,25 @@
 
     <!-- QUIZ INTERACTIVO -->
         // ==================== LOADER ====================
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                document.getElementById('loaderScreen').style.opacity = '0';
+        // Asegurarse de que el loader se quite incluso si 'load' no se dispara
+        function hideLoader() {
+            const loaderScreen = document.getElementById('loaderScreen');
+            if (loaderScreen) {
+                loaderScreen.style.opacity = '0';
                 setTimeout(() => {
-                    document.getElementById('loaderScreen').style.display = 'none';
+                    loaderScreen.style.display = 'none';
                     startAmbientEffects();
                 }, 1000);
-            }, 3000);
+            }
+        }
+
+        // Intentar con load
+        window.addEventListener('load', () => {
+            setTimeout(hideLoader, 2500);
         });
+
+        // Backup: si no se dispara load en 5 segundos, quitar de todas formas
+        setTimeout(hideLoader, 5000);
 
         // ==================== AMBIENT EFFECTS ====================
         function startAmbientEffects() {
