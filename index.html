@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -671,12 +671,6 @@
             margin-bottom: 50px;
         }
 
-        .spotify-embed {
-            margin-top: 50px;
-            border-radius: 20px;
-            overflow: hidden;
-        }
-
         /* Music Player */
         /* Responsive */
         @media (max-width: 768px) {
@@ -932,47 +926,6 @@
             100% {
                 transform: translate(var(--tx), var(--ty)) scale(0);
                 opacity: 0;
-            }
-        }
-
-        /* Polaroids cayendo */
-        .polaroid {
-            position: fixed;
-            width: 150px;
-            background: white;
-            padding: 10px;
-            padding-bottom: 40px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            z-index: 100;
-            pointer-events: none;
-        }
-
-        .polaroid-image {
-            width: 100%;
-            height: 150px;
-            background: linear-gradient(135deg, #ff6b9d, #c06c84);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            margin-bottom: 8px;
-        }
-
-        .polaroid-caption {
-            text-align: center;
-            font-family: 'Dancing Script', cursive;
-            font-size: 1rem;
-            color: #333;
-        }
-
-        @keyframes polaroidFall {
-            0% {
-                top: -200px;
-                transform: rotate(0deg);
-            }
-            100% {
-                top: 100vh;
-                transform: rotate(720deg);
             }
         }
 
@@ -1277,11 +1230,6 @@
                 Esta presentación es solo un pequeño reflejo de lo que siento por ti.<br><br>
                 <strong>Eres mi para siempre.</strong>
             </p>
-            
-            <!-- Spotify Embed (ejemplo - reemplaza con tu playlist) -->
-            <div class="spotify-embed">
-                <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/37i9dQZF1DX0Yxoavh5qJV?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-            </div>
 
             <button class="valentine-reveal-btn" onclick="revealValentineProposal()">
                 Hay algo más... 💕
@@ -1337,44 +1285,9 @@
                 document.getElementById('loaderScreen').style.opacity = '0';
                 setTimeout(() => {
                     document.getElementById('loaderScreen').style.display = 'none';
-                    // Iniciar polaroids después de que se quite el loader
-                    startPolaroids();
                 }, 1000);
             }, 3000);
         });
-
-        // ==================== POLAROIDS QUE CAEN ====================
-        function createPolaroid() {
-            const polaroid = document.createElement('div');
-            polaroid.className = 'polaroid';
-            polaroid.style.left = Math.random() * (window.innerWidth - 150) + 'px';
-            polaroid.style.animation = `polaroidFall ${Math.random() * 3 + 4}s ease-in forwards`;
-            
-            // Array de fotos reales con sus captions
-            const photos = [
-                { img: 'https://i.imgur.com/iFCo0eB.jpeg', caption: 'Nuestro primer día 💕' },
-                { img: 'https://i.imgur.com/Fq3rE81.jpeg', caption: 'Te amo mi niña' },
-                { img: 'https://i.imgur.com/WeUTacm.jpeg', caption: 'Mi persona favorita' },
-                { img: 'https://i.imgur.com/ptPUBJi.jpeg', caption: 'Momentos contigo ✨' },
-                { img: 'https://i.imgur.com/L6AmIwT.jpeg', caption: 'Para siempre juntos' }
-            ];
-            
-            const randomPhoto = photos[Math.floor(Math.random() * photos.length)];
-            
-            polaroid.innerHTML = `
-                <div class="polaroid-image" style="background: url('${randomPhoto.img}') center/cover no-repeat;"></div>
-                <div class="polaroid-caption">${randomPhoto.caption}</div>
-            `;
-            
-            document.body.appendChild(polaroid);
-            
-            setTimeout(() => polaroid.remove(), 7000);
-        }
-
-        function startPolaroids() {
-            // Crear un polaroid cada 8 segundos
-            setInterval(createPolaroid, 8000);
-        }
 
         // ==================== CUSTOM CURSOR ====================
         const cursor = document.getElementById('customCursor');
