@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>❤️ Para Ti, Mi Amor - ULTRA EDITION</title>
+    <title>❤️ Para Ti, Mi Amor</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Poppins:wght@300;400;600;700&family=Dancing+Script:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Poppins:wght@300;400;600;700&display=swap');
 
         * {
             margin: 0;
@@ -32,18 +31,14 @@
             background: #000;
             color: white;
             cursor: none;
-            transition: background 0.5s ease;
+            scroll-behavior: smooth;
+        }
+        
+        html {
+            scroll-behavior: smooth;
         }
 
-        body.day-mode {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-
-        body.day-mode .section-dark {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%) !important;
-        }
-
-        /* CURSOR PERSONALIZADO CON TRAIL */
+        /* Cursor personalizado */
         .custom-cursor {
             width: 20px;
             height: 20px;
@@ -52,88 +47,16 @@
             position: fixed;
             pointer-events: none;
             z-index: 9999;
-            transition: transform 0.1s ease;
+            transition: transform 0.2s ease;
             mix-blend-mode: difference;
         }
 
-        .cursor-trail {
-            position: fixed;
-            width: 10px;
-            height: 10px;
+        .custom-cursor.hover {
+            transform: scale(2);
             background: var(--primary);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9998;
-            opacity: 0.5;
-            animation: trailFade 0.5s ease-out forwards;
         }
 
-        @keyframes trailFade {
-            to {
-                transform: scale(0);
-                opacity: 0;
-            }
-        }
-
-        /* ESTRELLAS FUGACES */
-        .shooting-star {
-            position: fixed;
-            width: 2px;
-            height: 2px;
-            background: white;
-            border-radius: 50%;
-            box-shadow: 0 0 10px white;
-            z-index: 1;
-            animation: shoot 3s linear;
-        }
-
-        @keyframes shoot {
-            0% {
-                transform: translateX(0) translateY(0);
-                opacity: 1;
-            }
-            100% {
-                transform: translateX(-300px) translateY(300px);
-                opacity: 0;
-            }
-        }
-
-        .shooting-star::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 100px;
-            height: 2px;
-            background: linear-gradient(90deg, white, transparent);
-        }
-
-        /* AURORA BOREAL */
-        .aurora {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-            opacity: 0.3;
-            background: linear-gradient(45deg, 
-                transparent 0%, 
-                rgba(0, 255, 255, 0.1) 25%, 
-                rgba(255, 0, 255, 0.1) 50%, 
-                rgba(0, 255, 0, 0.1) 75%, 
-                transparent 100%);
-            background-size: 400% 400%;
-            animation: aurora 20s ease infinite;
-        }
-
-        @keyframes aurora {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-
-        /* CANVAS 3D */
+        /* Canvas 3D de fondo */
         #particles-canvas {
             position: fixed;
             top: 0;
@@ -144,7 +67,7 @@
             pointer-events: none;
         }
 
-        /* LOADER */
+        /* Loader inicial */
         .loader-screen {
             position: fixed;
             top: 0;
@@ -197,30 +120,7 @@
             to { width: 100%; }
         }
 
-        /* THEME TOGGLE */
-        .theme-toggle {
-            position: fixed;
-            top: 30px;
-            right: 30px;
-            width: 60px;
-            height: 60px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 1000;
-            transition: all 0.3s ease;
-            font-size: 24px;
-        }
-
-        .theme-toggle:hover {
-            transform: scale(1.1) rotate(180deg);
-        }
-
-        /* HERO SECTION */
+        /* Hero Section CINEMÁTICA */
         .hero-cinematic {
             height: 100vh;
             position: relative;
@@ -228,6 +128,17 @@
             justify-content: center;
             align-items: center;
             overflow: hidden;
+        }
+
+        .video-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.3;
+            z-index: 1;
         }
 
         .hero-content-cinematic {
@@ -297,401 +208,525 @@
             box-shadow: 0 30px 80px rgba(255, 107, 157, 0.6);
         }
 
-        /* POLAROIDS CAYENDO */
-        .polaroid {
-            position: fixed;
-            width: 200px;
-            background: white;
-            padding: 15px;
-            padding-bottom: 50px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            z-index: 100;
-            animation: polaroidFall 5s ease-in forwards;
-            transform-origin: center;
-        }
-
-        @keyframes polaroidFall {
-            0% {
-                top: -250px;
-                transform: rotate(0deg);
-            }
-            100% {
-                top: 100vh;
-                transform: rotate(720deg);
-            }
-        }
-
-        .polaroid-image {
-            width: 100%;
-            height: 180px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            margin-bottom: 10px;
-        }
-
-        .polaroid-caption {
-            text-align: center;
-            font-family: 'Dancing Script', cursive;
-            font-size: 1.2rem;
-            color: #333;
-        }
-
-        /* SECTIONS */
-        section {
+        /* Quiz Section */
+        .quiz-section {
             min-height: 100vh;
             padding: 100px 20px;
+            background: linear-gradient(180deg, #000 0%, #1a1a2e 100%);
             position: relative;
             z-index: 1;
         }
 
-        .section-light {
-            background: #f8f9fa;
-            color: #333;
+        .quiz-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 50px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .section-dark {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        .section-title {
+        .quiz-title {
             font-family: 'Playfair Display', serif;
-            font-size: 4rem;
+            font-size: 3rem;
             text-align: center;
             margin-bottom: 3rem;
-            font-weight: 700;
+            background: linear-gradient(45deg, #ff6b9d, #feca57);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        /* NUBE DE PALABRAS */
-        .word-cloud-section {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            position: relative;
+        .quiz-question {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
         }
 
-        .word-cloud {
-            max-width: 1200px;
-            width: 100%;
-            height: 600px;
-            position: relative;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .word {
-            font-family: 'Playfair Display', serif;
-            font-weight: 700;
-            color: white;
-            opacity: 0;
-            animation: wordAppear 0.5s ease forwards;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-shadow: 0 0 20px currentColor;
-        }
-
-        .word:hover {
-            transform: scale(1.2);
-            text-shadow: 0 0 30px currentColor;
-        }
-
-        @keyframes wordAppear {
-            to { opacity: 1; }
-        }
-
-        /* WHATSAPP CHAT */
-        .whatsapp-section {
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: #0a0e27;
-        }
-
-        .whatsapp-container {
-            max-width: 500px;
-            width: 100%;
-            height: 700px;
-            background: #0d1418;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 30px 100px rgba(0,0,0,0.5);
-        }
-
-        .whatsapp-header {
-            background: #1f2c33;
-            padding: 15px 20px;
-            display: flex;
-            align-items: center;
+        .quiz-options {
+            display: grid;
             gap: 15px;
         }
 
-        .whatsapp-avatar {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-        }
-
-        .whatsapp-name {
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
-
-        .whatsapp-messages {
+        .quiz-option {
             padding: 20px;
-            height: calc(100% - 75px);
-            overflow-y: auto;
-            background: #0d1418;
-        }
-
-        .whatsapp-message {
-            margin-bottom: 15px;
-            animation: messageSlide 0.3s ease;
-            opacity: 0;
-            animation-fill-mode: forwards;
-        }
-
-        .whatsapp-message.sent {
-            text-align: right;
-        }
-
-        .whatsapp-bubble {
-            display: inline-block;
-            padding: 10px 15px;
-            border-radius: 10px;
-            max-width: 70%;
-            word-wrap: break-word;
-        }
-
-        .whatsapp-message.sent .whatsapp-bubble {
-            background: #005c4b;
-            color: white;
-        }
-
-        .whatsapp-message.received .whatsapp-bubble {
-            background: #1f2c33;
-            color: white;
-        }
-
-        .whatsapp-time {
-            font-size: 0.7rem;
-            opacity: 0.6;
-            margin-top: 5px;
-        }
-
-        /* CARTAS QUE SE ABREN */
-        .letters-section {
-            min-height: 100vh;
-            padding: 100px 20px;
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .letters-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 40px;
-            max-width: 1200px;
-            width: 100%;
-            margin-top: 50px;
-        }
-
-        .letter-envelope {
-            width: 100%;
-            aspect-ratio: 1.6;
-            position: relative;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid transparent;
+            border-radius: 15px;
             cursor: pointer;
-            perspective: 1000px;
+            transition: all 0.3s ease;
+            text-align: center;
         }
 
-        .envelope {
-            width: 100%;
-            height: 100%;
-            background: #c23b22;
+        .quiz-option:hover {
+            background: rgba(255, 107, 157, 0.2);
+            border-color: var(--primary);
+            transform: translateX(10px);
+        }
+
+        .quiz-option.correct {
+            background: rgba(46, 213, 115, 0.3);
+            border-color: #2ed573;
+            animation: correctAnswer 0.5s ease;
+        }
+
+        @keyframes correctAnswer {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Parallax Timeline */
+        .parallax-timeline {
             position: relative;
-            transition: transform 0.6s;
-            transform-style: preserve-3d;
+            padding: 100px 20px;
+            background: #000;
         }
 
-        .letter-envelope.open .envelope {
-            transform: rotateX(-180deg);
+        .timeline-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            text-align: center;
+            margin-bottom: 100px;
+            background: linear-gradient(45deg, #ff6b9d, #c06c84);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .envelope-flap {
+        .timeline-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .timeline-event {
+            margin-bottom: 150px;
+            display: flex;
+            align-items: center;
+            gap: 50px;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+        }
+
+        .timeline-event.visible {
+            opacity: 1;
+        }
+
+        .timeline-event:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-image {
+            width: 400px;
+            height: 300px;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .timeline-image::before {
+            content: '';
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            height: 50%;
-            background: #d4483e;
-            transform-origin: top;
-            transition: transform 0.6s;
-            border-bottom: 2px solid #c23b22;
-            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.3), rgba(192, 108, 132, 0.3));
+            z-index: 1;
         }
 
-        .letter-envelope.open .envelope-flap {
-            transform: rotateX(-180deg);
+        .timeline-image-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
         }
 
-        .letter-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 90%;
-            height: 80%;
-            background: #fff9e6;
-            padding: 20px;
-            border-radius: 5px;
-            opacity: 0;
-            transition: opacity 0.3s 0.3s;
-            overflow-y: auto;
-            color: #333;
-            font-family: 'Dancing Script', cursive;
+        .timeline-content {
+            flex: 1;
+        }
+
+        .timeline-date {
+            font-size: 1rem;
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .timeline-event-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .timeline-description {
             font-size: 1.1rem;
             line-height: 1.8;
+            color: rgba(255, 255, 255, 0.8);
         }
 
-        .letter-envelope.open .letter-content {
-            opacity: 1;
-        }
-
-        /* TIMELINE ARRASTRABLE */
-        .draggable-timeline-section {
-            min-height: 100vh;
+        /* Stats Section */
+        .stats-section {
             padding: 100px 20px;
-            background: #000;
-            overflow: hidden;
+            background: linear-gradient(180deg, #000 0%, #16213e 100%);
+            position: relative;
         }
 
-        .timeline-drag-container {
-            max-width: 100%;
-            overflow-x: auto;
-            cursor: grab;
-            user-select: none;
+        .stats-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
         }
 
-        .timeline-drag-container:active {
-            cursor: grabbing;
-        }
-
-        .timeline-track {
-            display: flex;
-            gap: 100px;
-            padding: 50px;
-            min-width: max-content;
-        }
-
-        .timeline-card-drag {
-            min-width: 400px;
+        .stat-card {
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(10px);
             padding: 40px;
             border-radius: 20px;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            flex-shrink: 0;
+            text-align: center;
+            transition: transform 0.3s ease;
         }
 
-        .timeline-card-drag h3 {
-            font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            margin-bottom: 15px;
-            color: var(--primary);
+        .stat-card:hover {
+            transform: translateY(-10px);
         }
 
-        .timeline-card-drag p {
-            line-height: 1.8;
+        .stat-number {
+            font-size: 4rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #ff6b9d, #feca57);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
         }
 
-        /* CERTIFICADO PDF */
-        .certificate-section {
-            min-height: 100vh;
+        .stat-label {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .stat-chart {
+            margin-top: 30px;
+            height: 200px;
+            width: 100%;
+            position: relative;
+        }
+
+        .stat-card canvas {
+            max-height: 200px;
+        }
+
+        /* Flip Gallery */
+        .flip-gallery {
+            padding: 100px 20px;
+            background: #000;
+        }
+
+        .flip-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .flip-card {
+            height: 400px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .flip-card:hover .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .flip-card-front {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+        }
+
+        .flip-card-back {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            transform: rotateY(180deg);
+            padding: 30px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(135deg, #8e44ad 0%, #3498db 100%);
-        }
-
-        .certificate-preview {
-            max-width: 800px;
-            width: 100%;
-            background: white;
-            padding: 60px;
-            border-radius: 20px;
-            box-shadow: 0 30px 100px rgba(0,0,0,0.3);
             text-align: center;
-            border: 10px solid var(--primary);
+        }
+
+        .flip-card-back h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        .flip-card-back p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        /* Counter Animated */
+        .counter-section {
+            padding: 100px 20px;
+            background: #000;
             position: relative;
-            color: #333;
         }
 
-        .certificate-border {
+        .counter-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+        }
+
+        .counter-box {
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.1), rgba(192, 108, 132, 0.1));
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            border: 2px solid rgba(255, 107, 157, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .counter-box::before {
+            content: '';
             position: absolute;
-            top: 20px;
-            left: 20px;
-            right: 20px;
-            bottom: 20px;
-            border: 3px double var(--primary);
-            pointer-events: none;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 107, 157, 0.1), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
         }
 
-        .certificate-title {
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .counter-number {
+            font-size: 4rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #ff6b9d, #feca57);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .counter-label {
+            font-size: 1.2rem;
+            margin-top: 10px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Typewriter Effect */
+        .typewriter-section {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 50px 20px;
+        }
+
+        .typewriter-container {
+            max-width: 900px;
+            text-align: center;
+        }
+
+        .typewriter-text {
             font-family: 'Playfair Display', serif;
             font-size: 3rem;
-            margin-bottom: 30px;
-            color: var(--primary);
+            line-height: 1.6;
+            margin-bottom: 50px;
         }
 
-        .certificate-body {
-            font-size: 1.3rem;
-            line-height: 2;
-            margin-bottom: 40px;
+        .typing {
+            border-right: 3px solid var(--primary);
+            animation: blink 0.7s infinite;
         }
 
-        .certificate-signature {
-            font-family: 'Dancing Script', cursive;
+        @keyframes blink {
+            0%, 100% { border-color: var(--primary); }
+            50% { border-color: transparent; }
+        }
+
+        /* Easter Eggs */
+        .easter-egg {
+            position: fixed;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            z-index: 100;
+            transition: transform 0.3s ease;
+        }
+
+        .easter-egg:hover {
+            transform: scale(1.5) rotate(360deg);
+        }
+
+        .easter-egg-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: rgba(0, 0, 0, 0.95);
+            padding: 50px;
+            border-radius: 30px;
+            z-index: 1000;
+            max-width: 600px;
+            text-align: center;
+            transition: transform 0.5s ease;
+            border: 2px solid var(--primary);
+        }
+
+        .easter-egg-modal.active {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .easter-egg-modal h2 {
+            font-family: 'Playfair Display', serif;
             font-size: 2.5rem;
-            color: var(--primary);
-            margin-top: 40px;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #ff6b9d, #feca57);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .download-pdf-btn {
-            margin-top: 40px;
-            padding: 15px 40px;
+        .close-modal {
+            margin-top: 30px;
+            padding: 10px 30px;
             background: var(--primary);
-            color: white;
             border: none;
             border-radius: 50px;
-            font-size: 1.1rem;
+            color: white;
             cursor: pointer;
-            transition: all 0.3s ease;
+            font-size: 1rem;
         }
 
-        .download-pdf-btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(255, 107, 157, 0.4);
+        /* Final Epic */
+        .final-section {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #000;
+            position: relative;
+            overflow: hidden;
         }
 
-        /* SCROLL PROGRESS */
+        .final-content {
+            text-align: center;
+            z-index: 1;
+            max-width: 1000px;
+            padding: 50px;
+        }
+
+        .final-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 5rem;
+            margin-bottom: 30px;
+            animation: finalPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes finalPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .final-message {
+            font-size: 1.8rem;
+            line-height: 2;
+            margin-bottom: 50px;
+        }
+
+        .spotify-embed {
+            margin-top: 50px;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        /* Music Player */
+        /* Responsive */
+        @media (max-width: 768px) {
+            .cinematic-title {
+                font-size: 3rem;
+            }
+
+            .timeline-event {
+                flex-direction: column !important;
+            }
+
+            .timeline-image {
+                width: 100%;
+            }
+
+            .flip-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .typewriter-text {
+                font-size: 1.8rem;
+            }
+
+            .valentine-question {
+                font-size: 2.5rem !important;
+                padding: 0 20px;
+            }
+
+            .valentine-buttons {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .btn-yes, .btn-no {
+                padding: 20px 40px;
+                font-size: 1.2rem;
+            }
+
+            .response-title {
+                font-size: 2.5rem !important;
+                padding: 0 20px;
+            }
+
+            .response-message {
+                font-size: 1.3rem !important;
+                padding: 0 20px;
+            }
+        }
+
+        /* Scroll Progress Bar */
         .scroll-progress {
             position: fixed;
             top: 0;
@@ -703,47 +738,268 @@
             transition: width 0.1s ease;
         }
 
-        /* RESPONSIVE */
-        @media (max-width: 768px) {
-            .cinematic-title {
-                font-size: 3rem;
-            }
-            
-            .word-cloud {
-                height: 400px;
-            }
+        /* Valentine Proposal Styles */
+        .valentine-reveal-btn {
+            margin-top: 50px;
+            padding: 20px 50px;
+            font-size: 1.3rem;
+            background: linear-gradient(135deg, #ff6b9d, #feca57);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 20px 60px rgba(255, 107, 157, 0.4);
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+        }
 
-            .whatsapp-container {
-                height: 600px;
-            }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
 
-            .timeline-card-drag {
-                min-width: 300px;
-            }
+        .valentine-reveal-btn:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 30px 80px rgba(255, 107, 157, 0.6);
+        }
 
-            .certificate-preview {
-                padding: 30px;
-            }
+        .valentine-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.98);
+            z-index: 10000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
 
-            .music-player {
-                width: 250px;
-                bottom: 20px;
-                right: 20px;
+        .valentine-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .valentine-container {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .valentine-question {
+            font-family: 'Playfair Display', serif;
+            font-size: 5rem;
+            background: linear-gradient(45deg, #ff6b9d, #feca57, #ff6b9d);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 3s ease infinite, scaleIn 1s ease;
+            margin-bottom: 50px;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+                opacity: 0;
             }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .valentine-buttons {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            margin-top: 50px;
+        }
+
+        .btn-yes, .btn-no {
+            padding: 25px 60px;
+            font-size: 1.5rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .btn-yes {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: white;
+            box-shadow: 0 20px 60px rgba(46, 204, 113, 0.4);
+            animation: bounceYes 2s infinite;
+        }
+
+        @keyframes bounceYes {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .btn-yes:hover {
+            transform: scale(1.2) !important;
+            box-shadow: 0 30px 80px rgba(46, 204, 113, 0.6);
+        }
+
+        .btn-no {
+            background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+            color: white;
+            box-shadow: 0 20px 60px rgba(149, 165, 166, 0.3);
+        }
+
+        .btn-no:hover {
+            background: linear-gradient(135deg, #7f8c8d, #95a5a6);
+        }
+
+        .hearts-explosion {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .valentine-response {
+            animation: responseAppear 1s ease;
+        }
+
+        @keyframes responseAppear {
+            from {
+                transform: scale(0) rotate(-180deg);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1) rotate(0);
+                opacity: 1;
+            }
+        }
+
+        .response-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            background: linear-gradient(45deg, #ff6b9d, #feca57);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 30px;
+            animation: celebrate 1s ease infinite;
+        }
+
+        @keyframes celebrate {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+
+        .response-message {
+            font-size: 1.8rem;
+            line-height: 2;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .fireworks {
+            margin-top: 50px;
+            height: 300px;
+            position: relative;
+        }
+
+        .firework {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            animation: explode 1s ease-out forwards;
+        }
+
+        @keyframes explode {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty)) scale(0);
+                opacity: 0;
+            }
+        }
+
+        /* Polaroids cayendo */
+        .polaroid {
+            position: fixed;
+            width: 150px;
+            background: white;
+            padding: 10px;
+            padding-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            z-index: 100;
+            pointer-events: none;
+        }
+
+        .polaroid-image {
+            width: 100%;
+            height: 150px;
+            background: linear-gradient(135deg, #ff6b9d, #c06c84);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            margin-bottom: 8px;
+        }
+
+        .polaroid-caption {
+            text-align: center;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1rem;
+            color: #333;
+        }
+
+        @keyframes polaroidFall {
+            0% {
+                top: -200px;
+                transform: rotate(0deg);
+            }
+            100% {
+                top: 100vh;
+                transform: rotate(720deg);
+            }
+        }
+
+        /* Section Headers */
+        .section-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .section-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            background: linear-gradient(45deg, #ff6b9d, #feca57);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .section-header p {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.7);
         }
     </style>
 </head>
 <body>
-    <!-- Aurora Boreal -->
-    <div class="aurora"></div>
-
-    <!-- Scroll Progress -->
+    <!-- Scroll Progress Bar -->
     <div class="scroll-progress" id="scrollProgress"></div>
-
-    <!-- Theme Toggle -->
-    <div class="theme-toggle" id="themeToggle" onclick="toggleTheme()">
-        <span id="themeIcon">🌙</span>
-    </div>
 
     <!-- Custom Cursor -->
     <div class="custom-cursor" id="customCursor"></div>
@@ -760,273 +1016,434 @@
         </div>
     </div>
 
-    <!-- Hero Section -->
+    <!-- Hero Cinematic -->
     <section class="hero-cinematic" id="hero">
         <div class="hero-content-cinematic">
-            <h1 class="cinematic-title">Para Ti, Joss</h1>
-            <p class="subtitle-cinematic">Un viaje lleno de amor y momentos mágicos</p>
-            <button class="cta-button" onclick="startJourney()">Comenzar Nuestra Historia ✨</button>
+            <h1 class="cinematic-title">Nuestra Historia</h1>
+            <p class="subtitle-cinematic">Un amor que trasciende el tiempo</p>
+            <button class="cta-button" onclick="startJourney()">Comenzar el Viaje ✨</button>
         </div>
     </section>
 
-    <!-- Nube de Palabras -->
-    <section class="word-cloud-section">
-        <h2 class="section-title">Palabras Que Definen Lo Nuestro</h2>
-        <div class="word-cloud" id="wordCloud"></div>
+    <!-- Quiz Interactivo -->
+    <section class="quiz-section" id="quizSection">
+        <div class="quiz-container">
+            <h2 class="quiz-title">¿Cuánto Sabes de Nosotros?</h2>
+            <div id="quizContent"></div>
+        </div>
     </section>
 
-    <!-- WhatsApp Chat -->
-    <section class="whatsapp-section">
-        <div class="section-header" style="text-align: center; margin-bottom: 50px;">
-            <h2 class="section-title">Nuestras Conversaciones</h2>
-            <p style="font-size: 1.3rem; opacity: 0.8;">Mensajes que guardé en mi corazón</p>
+    <!-- Counter Section -->
+    <section class="counter-section">
+        <div class="section-header">
+            <h2>Nuestro Tiempo Juntos</h2>
+            <p>Cada segundo a tu lado es un regalo</p>
         </div>
-        <div class="whatsapp-container">
-            <div class="whatsapp-header">
-                <div class="whatsapp-avatar">J</div>
-                <div class="whatsapp-name">Joss 🫶</div>
+        <div class="counter-grid">
+            <div class="counter-box">
+                <div class="counter-number" id="days">0</div>
+                <div class="counter-label">DÍAS</div>
             </div>
-            <div class="whatsapp-messages" id="whatsappMessages">
-                <!-- Los mensajes se generarán con JavaScript -->
+            <div class="counter-box">
+                <div class="counter-number" id="hours">0</div>
+                <div class="counter-label">HORAS</div>
+            </div>
+            <div class="counter-box">
+                <div class="counter-number" id="minutes">0</div>
+                <div class="counter-label">MINUTOS</div>
+            </div>
+            <div class="counter-box">
+                <div class="counter-number" id="seconds">0</div>
+                <div class="counter-label">SEGUNDOS</div>
             </div>
         </div>
     </section>
 
-    <!-- Timeline con Botones -->
-    <section class="draggable-timeline-section">
-        <h2 class="section-title">Nuestra Línea del Tiempo</h2>
-        <p style="text-align: center; font-size: 1.3rem; opacity: 0.8; margin-bottom: 60px;">Navega por nuestros momentos especiales</p>
-        <div style="max-width: 800px; margin: 0 auto;">
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="section-header">
+            <h2>Nuestra Historia en Números</h2>
+            <p>Estadísticas de un amor épico</p>
+        </div>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="stat1">209</div>
+                <div class="stat-label">Días Juntos 🌅</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="stat2">118,089</div>
+                <div class="stat-label">Mensajes de Amor 💬</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="stat3">4,219</div>
+                <div class="stat-label">"Te Amo" Dichos ❤️</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="stat4">∞</div>
+                <div class="stat-label">Momentos Especiales 💕</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Parallax Timeline -->
+    <section class="parallax-timeline">
+        <h2 class="timeline-title">Momentos Que Marcaron Nuestra Historia</h2>
+        <div class="timeline-wrapper">
+            <div class="timeline-event" data-scroll>
+                <div class="timeline-image">
+                    <div class="timeline-image-placeholder">📱</div>
+                </div>
+                <div class="timeline-content">
+                    <div class="timeline-date">13 de Julio, 2025</div>
+                    <h3 class="timeline-event-title">Todo Comenzó en Instagram</h3>
+                    <p class="timeline-description">
+                        Te respondí una historia de tu cuadro de Junior H. Un comentario simple que se convirtió 
+                        en la mejor conversación de mi vida. Desde ese día supe que eras diferente.
+                    </p>
+                </div>
+            </div>
+
+            <div class="timeline-event" data-scroll>
+                <div class="timeline-image">
+                    <div class="timeline-image-placeholder">💬</div>
+                </div>
+                <div class="timeline-content">
+                    <div class="timeline-date">28 de Julio, 2025</div>
+                    <h3 class="timeline-event-title">Pasamos a WhatsApp</h3>
+                    <p class="timeline-description">
+                        Nuestra conversación se mudó a WhatsApp. Hablamos hasta la 1 AM sin darnos cuenta del tiempo. 
+                        Desde ese momento cada "buenos días preciosa" se volvió parte de mi rutina favorita.
+                    </p>
+                </div>
+            </div>
+
+            <div class="timeline-event" data-scroll>
+                <div class="timeline-image">
+                    <div class="timeline-image-placeholder">🎂</div>
+                </div>
+                <div class="timeline-content">
+                    <div class="timeline-date">31 de Julio, 2025 - 12:14 AM</div>
+                    <h3 class="timeline-event-title">Tu Cumpleaños</h3>
+                    <p class="timeline-description">
+                        "FELIZ CUMPLEAÑOS PRECIOSAAAAAAAAAAA, es el primer de muchos cumpleaños juntos. 
+                        Ahorita te he agarrado demasiado cariño y la vdd si quiero un futuro contigo, 
+                        eres de las pocas personas en las que he coincidido en demasiadas cosas y eso me encanta."
+                    </p>
+                </div>
+            </div>
+
+            <div class="timeline-event" data-scroll>
+                <div class="timeline-image">
+                    <div class="timeline-image-placeholder">❤️</div>
+                </div>
+                <div class="timeline-content">
+                    <div class="timeline-date">2 de Agosto, 2025 - 9:10 PM</div>
+                    <h3 class="timeline-event-title">El Primer "Te Amo"</h3>
+                    <p class="timeline-description">
+                        "Te amoo" - Fuiste tú quien lo dijo primero. Ese mensaje cambió todo. 
+                        Desde ese día, "Te amo" dejó de ser solo una frase para convertirse en nuestra promesa.
+                    </p>
+                </div>
+            </div>
+
+            <div class="timeline-event" data-scroll>
+                <div class="timeline-image">
+                    <div class="timeline-image-placeholder">🎭</div>
+                </div>
+                <div class="timeline-content">
+                    <div class="timeline-date">7 de Agosto, 2025</div>
+                    <h3 class="timeline-event-title">Nuestra Primera Cita</h3>
+                    <p class="timeline-description">
+                        Palacio de la Música y después el Parque de la Plancha. El día que dejamos de ser solo mensajes 
+                        para convertirnos en miradas, sonrisas y momentos reales. Desde ese día supe que esto era especial.
+                    </p>
+                </div>
+            </div>
+
+            <div class="timeline-event" data-scroll>
+                <div class="timeline-image">
+                    <div class="timeline-image-placeholder">💕</div>
+                </div>
+                <div class="timeline-content">
+                    <div class="timeline-date">Hasta Hoy</div>
+                    <h3 class="timeline-event-title">Cada Día Contigo</h3>
+                    <p class="timeline-description">
+                        Desde "buenos días preciosa" hasta "te amo muchísimo", cada mensaje, 
+                        cada llamada, cada momento juntos ha sido perfecto. Esta es solo el inicio de nuestra historia.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Flip Gallery -->
+    <section class="flip-gallery">
+        <div class="section-header">
+            <h2>Por Qué Te Amo</h2>
+            <p>Pasa el cursor sobre cada tarjeta para descubrir una razón</p>
+        </div>
+        <div class="flip-grid">
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <span>01</span>
+                    </div>
+                    <div class="flip-card-back">
+                        <h3>Tus Ojos</h3>
+                        <p>Tienen algo especial que me desarma. Cuando me miras, siento que puedo ver tu alma. Tus ojos dicen más que mil palabras y me enamoran cada vez que los veo.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <span>02</span>
+                    </div>
+                    <div class="flip-card-back">
+                        <h3>Tu Forma de Amar</h3>
+                        <p>"Cesarr emiliano garcia entiendeeee que yo te amoo infinitamente desde el primer dia te lo demostre con un kiss✨, eres lo más bonito de este año y de los que siguen."</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <span>03</span>
+                    </div>
+                    <div class="flip-card-back">
+                        <h3>Tu Sonrisa</h3>
+                        <p>Tu sonrisa ilumina hasta mis días más oscuros. Cuando sonríes, el mundo entero se detiene. Haría cualquier cosa por verte sonreír así cada día.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <span>04</span>
+                    </div>
+                    <div class="flip-card-back">
+                        <h3>Que Siempre Eres Sincera</h3>
+                        <p>Siempre me dices lo que sientes, sin filtros, sin miedo. Tu honestidad y transparencia son cosas que admiro profundamente. Contigo todo es real.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <span>05</span>
+                    </div>
+                    <div class="flip-card-back">
+                        <h3>Eres Mi Persona Favorita</h3>
+                        <p>"Eres mi persona favorita, eres todo lo que quiero para siempre amor mioo". Esas palabras tuyas se quedaron grabadas en mi corazón para siempre.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <span>06</span>
+                    </div>
+                    <div class="flip-card-back">
+                        <h3>Nuestro Futuro</h3>
+                        <p>Desde el día de tu cumpleaños supe que quiero un futuro contigo. Contigo quiero hacer las cosas bien, porque de verdad vales la pena.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Typewriter Section -->
+    <section class="typewriter-section">
+        <div class="typewriter-container">
+            <div class="typewriter-text" id="typewriterText"></div>
+            <p style="text-align: center; font-size: 1.3rem; font-weight: 700; margin-top: 50px; letter-spacing: 2px; color: #ff6b9d;">
+                ES ALGO QUE DIJE, LO SOSTENGO Y SIEMPRE LO HARÉ
+            </p>
+        </div>
+    </section>
+
+    <!-- Final Section -->
+    <section class="final-section">
+        <div class="final-content">
+            <h2 class="final-title">Te Amo ❤️</h2>
+            <p class="final-message">
+                Gracias por cada sonrisa, cada abrazo, cada momento compartido.<br>
+                Gracias por ser mi compañera, mi confidente, mi mejor amiga, mi amor.<br>
+                Esta presentación es solo un pequeño reflejo de lo que siento por ti.<br><br>
+                <strong>Eres mi para siempre.</strong>
+            </p>
             
-            <!-- Evento 1 -->
-            <div class="timeline-card-vertical" id="timeline1" style="background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); padding: 40px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1); margin-bottom: 30px;">
-                <h3 style="font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 15px; color: var(--primary);">📱 13 de Julio, 2025</h3>
-                <h4 style="font-size: 1.5rem; margin-bottom: 15px;">Todo Comenzó en Instagram</h4>
-                <p style="line-height: 1.8;">Todo comenzó en Instagram. Un DM que cambiaría nuestras vidas para siempre.</p>
-                <button onclick="scrollToTimeline(2)" style="margin-top: 20px; padding: 12px 30px; background: linear-gradient(135deg, var(--primary), var(--accent)); border: none; border-radius: 50px; color: white; cursor: pointer; font-weight: 600; transition: all 0.3s ease;">
-                    Siguiente →
-                </button>
+            <!-- Spotify Embed (ejemplo - reemplaza con tu playlist) -->
+            <div class="spotify-embed">
+                <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/37i9dQZF1DX0Yxoavh5qJV?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
             </div>
 
-            <!-- Evento 2 -->
-            <div class="timeline-card-vertical" id="timeline2" style="background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); padding: 40px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1); margin-bottom: 30px;">
-                <h3 style="font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 15px; color: var(--primary);">💬 28 de Julio, 2025</h3>
-                <h4 style="font-size: 1.5rem; margin-bottom: 15px;">El Primer "Holiiii"</h4>
-                <p style="line-height: 1.8;">"Holiiii" - El primer mensaje en WhatsApp. Hablamos hasta la 1 AM sin darnos cuenta.</p>
-                <button onclick="scrollToTimeline(3)" style="margin-top: 20px; padding: 12px 30px; background: linear-gradient(135deg, var(--primary), var(--accent)); border: none; border-radius: 50px; color: white; cursor: pointer; font-weight: 600; transition: all 0.3s ease;">
-                    Siguiente →
-                </button>
-            </div>
-
-            <!-- Evento 3 -->
-            <div class="timeline-card-vertical" id="timeline3" style="background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); padding: 40px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1); margin-bottom: 30px;">
-                <h3 style="font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 15px; color: var(--primary);">🎂 31 de Julio, 2025</h3>
-                <h4 style="font-size: 1.5rem; margin-bottom: 15px;">Tu Cumpleaños</h4>
-                <p style="line-height: 1.8;">Tu cumpleaños. El día que te dije que quería un futuro contigo.</p>
-                <button onclick="scrollToTimeline(4)" style="margin-top: 20px; padding: 12px 30px; background: linear-gradient(135deg, var(--primary), var(--accent)); border: none; border-radius: 50px; color: white; cursor: pointer; font-weight: 600; transition: all 0.3s ease;">
-                    Siguiente →
-                </button>
-            </div>
-
-            <!-- Evento 4 -->
-            <div class="timeline-card-vertical" id="timeline4" style="background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); padding: 40px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1); margin-bottom: 30px;">
-                <h3 style="font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 15px; color: var(--primary);">❤️ 2 de Agosto, 2025</h3>
-                <h4 style="font-size: 1.5rem; margin-bottom: 15px;">El Primer "Te Amo"</h4>
-                <p style="line-height: 1.8;">El primer "Te Amo". Las palabras más sinceras que he dicho.</p>
-                <button onclick="scrollToTimeline(5)" style="margin-top: 20px; padding: 12px 30px; background: linear-gradient(135deg, var(--primary), var(--accent)); border: none; border-radius: 50px; color: white; cursor: pointer; font-weight: 600; transition: all 0.3s ease;">
-                    Siguiente →
-                </button>
-            </div>
-
-            <!-- Evento 5 -->
-            <div class="timeline-card-vertical" id="timeline5" style="background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); padding: 40px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1); margin-bottom: 30px;">
-                <h3 style="font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 15px; color: var(--primary);">💕 Hasta Hoy</h3>
-                <h4 style="font-size: 1.5rem; margin-bottom: 15px;">Cada Día Contigo</h4>
-                <p style="line-height: 1.8;">Cada día contigo es un regalo. Cada "buenos días preciosa" es una promesa.</p>
-                <button onclick="document.querySelector('.letters-section').scrollIntoView({ behavior: 'smooth' })" style="margin-top: 20px; padding: 12px 30px; background: linear-gradient(135deg, #2ecc71, #27ae60); border: none; border-radius: 50px; color: white; cursor: pointer; font-weight: 600; transition: all 0.3s ease;">
-                    Continuar ✨
-                </button>
-            </div>
-
-        </div>
-    </section>
-
-    <!-- Cartas que se Abren -->
-    <section class="letters-section">
-        <h2 class="section-title">Cartas de Amor (Click para Abrir)</h2>
-        <div class="letters-grid">
-            <div class="letter-envelope" onclick="this.classList.toggle('open')">
-                <div class="envelope">
-                    <div class="envelope-flap"></div>
-                    <div class="letter-content">
-                        <p style="font-size: 1.2rem; line-height: 2;">Mi amor, cada día que paso me doy cuenta de lo afortunado que soy de tenerte. Tu sonrisa ilumina mis días más oscuros y tu voz es la melodía que quiero escuchar siempre. Te amo infinitamente.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="letter-envelope" onclick="this.classList.toggle('open')">
-                <div class="envelope">
-                    <div class="envelope-flap"></div>
-                    <div class="letter-content">
-                        <p style="font-size: 1.2rem; line-height: 2;">Joss, eres esa persona con la que he coincidido en demasiadas cosas. Contigo quiero hacer las cosas bien porque de verdad vales la pena. Gracias por ser tú, por ser real, por ser mi todo.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="letter-envelope" onclick="this.classList.toggle('open')">
-                <div class="envelope">
-                    <div class="envelope-flap"></div>
-                    <div class="letter-content">
-                        <p style="font-size: 1.2rem; line-height: 2;">Cuando me preguntas "¿Ya desayunaste?" o "¿Cómo amaneciste?", me haces sentir especial. Esos pequeños detalles son los que me enamoran más de ti cada día. Te quiero muchísimo.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="letter-envelope" onclick="this.classList.toggle('open')">
-                <div class="envelope">
-                    <div class="envelope-flap"></div>
-                    <div class="letter-content">
-                        <p style="font-size: 1.2rem; line-height: 2;">Esta presentación es solo un pequeño reflejo de todo lo que siento por ti. No hay palabras suficientes para describir lo que provocas en mi corazón. Eres mi para siempre. 💕</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Certificado de Amor -->
-    <section class="certificate-section">
-        <h2 class="section-title" style="margin-bottom: 50px;">Certificado Oficial de Amor</h2>
-        <div class="certificate-preview" id="certificate">
-            <div class="certificate-border"></div>
-            <div class="certificate-title">Certificado de Amor Eterno</div>
-            <div class="certificate-body">
-                Se certifica que <strong>Joss</strong> es oficialmente<br>
-                la dueña del corazón de <strong>Cesar</strong><br><br>
-                Desde el <strong>13 de Julio, 2025</strong><br>
-                hasta el <strong>infinito y más allá</strong><br><br>
-                Este amor es inquebrantable, verdadero y eterno.<br>
-                Válido por toda la vida.
-            </div>
-            <div class="certificate-signature">
-                Con todo mi amor,<br>
-                Cesar G. ❤️
-            </div>
-            <button class="download-pdf-btn" onclick="downloadCertificate()">
-                Descargar Certificado PDF 📄
+            <button class="valentine-reveal-btn" onclick="revealValentineProposal()">
+                Hay algo más... 💕
             </button>
         </div>
     </section>
-    <script>
-        // ============ LOADER SIMPLIFICADO ============
-        setTimeout(function() {
-            var loader = document.getElementById('loaderScreen');
-            if (loader) {
-                loader.style.opacity = '0';
-                setTimeout(function() { 
-                    loader.style.display = 'none'; 
-                }, 1000);
-            }
-        }, 3000);
 
-        // ============ FUNCIONES BÁSICAS ============
-        function createShootingStar() {
-            var star = document.createElement('div');
-            star.className = 'shooting-star';
-            star.style.left = Math.random() * 100 + '%';
-            star.style.top = Math.random() * 50 + '%';
-            document.body.appendChild(star);
-            setTimeout(function() { star.remove(); }, 3000);
-        }
-
-        function createPolaroid() {
-            var polaroid = document.createElement('div');
-            polaroid.className = 'polaroid';
-            polaroid.style.left = Math.random() * (window.innerWidth - 200) + 'px';
-            polaroid.innerHTML = '<div class="polaroid-image">📷</div><div class="polaroid-caption">Momento especial juntos</div>';
-            document.body.appendChild(polaroid);
-            setTimeout(function() { polaroid.remove(); }, 5000);
-        }
-
-        function scrollToTimeline(number) {
-            var element = document.getElementById('timeline' + number);
-            if (element) {
-                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-        }
-
-        // Iniciar efectos ambient
-        setTimeout(function() {
-            setInterval(createShootingStar, 3000);
-            setInterval(createPolaroid, 8000);
-        }, 4000);
-
-        // ============ CURSOR PERSONALIZADO ============
-        var cursor = document.getElementById('customCursor');
-        var mouseX = 0, mouseY = 0;
-
-        document.addEventListener('mousemove', function(e) {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-            if (cursor) {
-                cursor.style.left = mouseX + 'px';
-                cursor.style.top = mouseY + 'px';
-            }
+    <!-- VALENTINE PROPOSAL SURPRISE -->
+    <div class="valentine-overlay" id="valentineOverlay">
+        <div class="valentine-container">
+            <div class="hearts-explosion" id="heartsExplosion"></div>
             
-            if (Math.random() > 0.8) {
-                var trail = document.createElement('div');
-                trail.className = 'cursor-trail';
-                trail.style.left = mouseX + 'px';
-                trail.style.top = mouseY + 'px';
-                document.body.appendChild(trail);
-                setTimeout(function() { trail.remove(); }, 500);
-            }
+            <div class="valentine-content" id="valentineContent">
+                <h1 class="valentine-question">¿Quieres ser mi San Valentín?</h1>
+                
+                <div class="valentine-buttons">
+                    <button class="btn-yes" id="btnYes" onclick="handleYes()">
+                        ¡SÍ! 💕
+                    </button>
+                    <button class="btn-no" id="btnNo" onmouseover="moveNoButton()" onclick="moveNoButton()">
+                        No
+                    </button>
+                </div>
+
+                <div class="valentine-response" id="valentineResponse" style="display: none;">
+                    <h2 class="response-title">¡SABÍA QUE DIRÍAS QUE SÍ! 🎉</h2>
+                    <p class="response-message">
+                        Este San Valentín será inolvidable, porque lo pasaré contigo.<br>
+                        Te amo más de lo que las palabras pueden expresar ❤️
+                    </p>
+                    <div class="fireworks" id="fireworks"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Easter Eggs -->
+    <div class="easter-egg" style="top: 20%; left: 10%;" onclick="showEasterEgg(1)">🌟</div>
+    <div class="easter-egg" style="top: 50%; right: 15%;" onclick="showEasterEgg(2)">💎</div>
+    <div class="easter-egg" style="bottom: 30%; left: 20%;" onclick="showEasterEgg(3)">🦋</div>
+
+    <!-- Easter Egg Modal -->
+    <div class="easter-egg-modal" id="easterEggModal">
+        <h2 id="easterEggTitle"></h2>
+        <p id="easterEggMessage"></p>
+        <button class="close-modal" onclick="closeEasterEgg()">Cerrar ❤️</button>
+    </div>
+
+    <script>
+        // ==================== LOADER ====================
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loaderScreen').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('loaderScreen').style.display = 'none';
+                    // Iniciar polaroids después de que se quite el loader
+                    startPolaroids();
+                }, 1000);
+            }, 3000);
         });
 
-        document.querySelectorAll('button, a, .letter-envelope').forEach(function(el) {
-            el.addEventListener('mouseenter', function() { if (cursor) cursor.style.transform = 'scale(2)'; });
-            el.addEventListener('mouseleave', function() { if (cursor) cursor.style.transform = 'scale(1)'; });
-        });
-
-        // ============ SCROLL PROGRESS ============
-        window.addEventListener('scroll', function() {
-            var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-            var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            var scrolled = (winScroll / height) * 100;
-            var progress = document.getElementById('scrollProgress');
-            if (progress) progress.style.width = scrolled + '%';
-        });
-
-        // ============ THEME TOGGLE ============
-        function toggleTheme() {
-            document.body.classList.toggle('day-mode');
-            var icon = document.getElementById('themeIcon');
-            if (icon) {
-                icon.textContent = document.body.classList.contains('day-mode') ? '☀️' : '🌙';
-            }
+        // ==================== POLAROIDS QUE CAEN ====================
+        function createPolaroid() {
+            const polaroid = document.createElement('div');
+            polaroid.className = 'polaroid';
+            polaroid.style.left = Math.random() * (window.innerWidth - 150) + 'px';
+            polaroid.style.animation = `polaroidFall ${Math.random() * 3 + 4}s ease-in forwards`;
+            
+            // Array de fotos reales con sus captions
+            const photos = [
+                { img: 'https://i.imgur.com/iFCo0eB.jpeg', caption: 'Nuestro primer día 💕' },
+                { img: 'https://i.imgur.com/Fq3rE81.jpeg', caption: 'Te amo mi niña' },
+                { img: 'https://i.imgur.com/WeUTacm.jpeg', caption: 'Mi persona favorita' },
+                { img: 'https://i.imgur.com/ptPUBJi.jpeg', caption: 'Momentos contigo ✨' },
+                { img: 'https://i.imgur.com/L6AmIwT.jpeg', caption: 'Para siempre juntos' }
+            ];
+            
+            const randomPhoto = photos[Math.floor(Math.random() * photos.length)];
+            
+            polaroid.innerHTML = `
+                <div class="polaroid-image" style="background: url('${randomPhoto.img}') center/cover no-repeat;"></div>
+                <div class="polaroid-caption">${randomPhoto.caption}</div>
+            `;
+            
+            document.body.appendChild(polaroid);
+            
+            setTimeout(() => polaroid.remove(), 7000);
         }
-        function updateCounter() {
-            const startDate = new Date('2025-07-13T00:00:00');
-            const now = new Date();
-            const diff = now - startDate;
 
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-            const daysEl = document.getElementById('days');
-            const hoursEl = document.getElementById('hours');
-            const minutesEl = document.getElementById('minutes');
-            const secondsEl = document.getElementById('seconds');
-
-            if (daysEl) daysEl.textContent = days;
-            if (hoursEl) hoursEl.textContent = hours;
-            if (minutesEl) minutesEl.textContent = minutes;
-            if (secondsEl) secondsEl.textContent = seconds;
+        function startPolaroids() {
+            // Crear un polaroid cada 8 segundos
+            setInterval(createPolaroid, 8000);
         }
 
-        setInterval(updateCounter, 1000);
-        updateCounter();
+        // ==================== CUSTOM CURSOR ====================
+        const cursor = document.getElementById('customCursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
 
-        setInterval(updateCounter, 1000);
-        updateCounter();
+        document.querySelectorAll('button, a, .flip-card, .easter-egg').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+        });
+
+        // ==================== SCROLL PROGRESS ====================
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('scrollProgress').style.width = scrolled + '%';
+        });
+
+        // ==================== 3D PARTICLES ====================
+        const canvas = document.getElementById('particles-canvas');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
+        
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        camera.position.z = 5;
+
+        const geometry = new THREE.BufferGeometry();
+        const vertices = [];
+        const colors = [];
+
+        for (let i = 0; i < 2000; i++) {
+            vertices.push(
+                Math.random() * 20 - 10,
+                Math.random() * 20 - 10,
+                Math.random() * 20 - 10
+            );
+            colors.push(Math.random(), 0.3 + Math.random() * 0.3, 0.5 + Math.random() * 0.5);
+        }
+
+        geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+        geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+
+        const material = new THREE.PointsMaterial({
+            size: 0.05,
+            vertexColors: true,
+            transparent: true,
+            opacity: 0.8
+        });
+
+        const particles = new THREE.Points(geometry, material);
+        scene.add(particles);
+
+        function animateParticles() {
+            requestAnimationFrame(animateParticles);
+            particles.rotation.x += 0.0003;
+            particles.rotation.y += 0.0003;
+            renderer.render(scene, camera);
+        }
+        animateParticles();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
 
         // ==================== QUIZ ====================
         const quizQuestions = [
@@ -1050,33 +1467,40 @@
         let currentQuestion = 0;
         let correctAnswers = 0;
 
+        function startJourney() {
+            const quizSection = document.getElementById('quizSection');
+            quizSection.style.display = 'block';
+            
+            setTimeout(() => {
+                quizSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+            
+            loadQuiz();
+        }
+
         function loadQuiz() {
             const quizContent = document.getElementById('quizContent');
-            if (!quizContent) return;
-            
             if (currentQuestion >= quizQuestions.length) {
                 quizContent.innerHTML = `
                     <div style="text-align: center;">
-                        <h3 style="font-size: 2.5rem; margin-bottom: 20px; color: #333;">¡Increíble! 🎉</h3>
-                        <p style="font-size: 1.3rem; color: #666;">Acertaste ${correctAnswers} de ${quizQuestions.length} preguntas</p>
-                        <p style="font-size: 1.1rem; margin-top: 20px; opacity: 0.8; color: #666;">Ahora sí, disfruta el resto de nuestra historia...</p>
+                        <h3 style="font-size: 2.5rem; margin-bottom: 20px;">¡Increíble! 🎉</h3>
+                        <p style="font-size: 1.3rem;">Acertaste ${correctAnswers} de ${quizQuestions.length} preguntas</p>
+                        <p style="font-size: 1.1rem; margin-top: 20px; opacity: 0.8;">Ahora sí, disfruta el resto de nuestra historia...</p>
                     </div>
                 `;
                 setTimeout(() => {
-                    const counterSection = document.querySelector('.section-dark');
-                    if (counterSection) counterSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    const counterSection = document.querySelector('.counter-section');
+                    counterSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }, 3000);
                 return;
             }
 
             const q = quizQuestions[currentQuestion];
             quizContent.innerHTML = `
-                <div style="font-size: 1.5rem; margin-bottom: 2rem; text-align: center; color: #333;">${q.question}</div>
-                <div style="display: grid; gap: 15px;">
+                <div class="quiz-question">${q.question}</div>
+                <div class="quiz-options">
                     ${q.options.map((opt, i) => `
-                        <div onclick="checkAnswer(${i})" style="padding: 20px; background: rgba(255, 107, 157, 0.1); border: 2px solid transparent; border-radius: 15px; cursor: pointer; transition: all 0.3s ease; text-align: center; color: #333;" class="quiz-opt">
-                            ${opt}
-                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(${i})">${opt}</div>
                     `).join('')}
                 </div>
             `;
@@ -1084,11 +1508,10 @@
 
         function checkAnswer(selected) {
             const q = quizQuestions[currentQuestion];
-            const options = document.querySelectorAll('.quiz-opt');
+            const options = document.querySelectorAll('.quiz-option');
             
             if (selected === q.correct) {
-                options[selected].style.background = 'rgba(46, 213, 115, 0.3)';
-                options[selected].style.borderColor = '#2ed573';
+                options[selected].classList.add('correct');
                 correctAnswers++;
                 setTimeout(() => {
                     currentQuestion++;
@@ -1096,8 +1519,7 @@
                 }, 1500);
             } else {
                 options[selected].style.background = 'rgba(231, 76, 60, 0.3)';
-                options[q.correct].style.background = 'rgba(46, 213, 115, 0.3)';
-                options[q.correct].style.borderColor = '#2ed573';
+                options[q.correct].classList.add('correct');
                 setTimeout(() => {
                     currentQuestion++;
                     loadQuiz();
@@ -1105,127 +1527,84 @@
             }
         }
 
-        // ==================== CHARTS ====================
-        let chartsInitialized = false;
+        // ==================== COUNTER ====================
+        function updateCounter() {
+            const startDate = new Date('2025-07-13T00:00:00'); // 13 de julio - cuando empezaron en Instagram
+            const now = new Date();
+            const diff = now - startDate;
 
-        function initCharts() {
-            if (chartsInitialized) return;
-            chartsInitialized = true;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
-            const ctx1 = document.getElementById('monthlyChart');
-            if (ctx1) {
-                new Chart(ctx1.getContext('2d'), {
-                    type: 'line',
-                    data: {
-                        labels: ['Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic', 'Ene', 'Feb'],
-                        datasets: [{
-                            label: 'Felicidad',
-                            data: [85, 90, 88, 95, 92, 96, 94, 99],
-                            borderColor: '#ff6b9d',
-                            backgroundColor: 'rgba(255, 107, 157, 0.1)',
-                            tension: 0.4,
-                            fill: true
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: { 
-                            legend: { display: false },
-                            tooltip: { enabled: true }
-                        },
-                        scales: {
-                            y: { display: false, beginAtZero: true },
-                            x: { display: true, grid: { display: false }, ticks: { color: 'rgba(255, 255, 255, 0.7)' }}
-                        }
-                    }
-                });
-            }
-
-            const ctx2 = document.getElementById('activitiesChart');
-            if (ctx2) {
-                new Chart(ctx2.getContext('2d'), {
-                    type: 'doughnut',
-                    data: {
-                        labels: ['Mensajes', 'Llamadas', 'Salidas', 'Películas', 'Otros'],
-                        datasets: [{
-                            data: [40, 25, 15, 15, 5],
-                            backgroundColor: ['#ff6b9d', '#c06c84', '#f67280', '#feca57', '#48dbfb'],
-                            borderWidth: 0
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: { 
-                            legend: { 
-                                display: true,
-                                position: 'bottom',
-                                labels: { color: 'rgba(255, 255, 255, 0.8)', padding: 10, font: { size: 11 }}
-                            }
-                        },
-                        cutout: '60%'
-                    }
-                });
-            }
+            document.getElementById('days').textContent = days;
+            document.getElementById('hours').textContent = hours;
+            document.getElementById('minutes').textContent = minutes;
+            document.getElementById('seconds').textContent = seconds;
         }
 
-        // Stats Observer
+        setInterval(updateCounter, 1000);
+        updateCounter();
+
+        // ==================== ANIMATED STATS ====================
+        function animateNumber(id, target) {
+            const element = document.getElementById(id);
+            if (!element) return;
+            
+            let current = 0;
+            const increment = target / 100;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    element.textContent = target === Infinity ? '∞' : Math.floor(target);
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.floor(current);
+                }
+            }, 20);
+        }
+
         const statsObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    setTimeout(() => initCharts(), 500);
+                    // Animar números
+                    animateNumber('stat1', 209);
+                    animateNumber('stat2', 118089);
+                    animateNumber('stat3', 4219);
+                    
+                    // Inicializar gráficas
+                    setTimeout(() => {
+                        initCharts();
+                    }, 500);
+                    
+                    // Desconectar observer después de la primera vez
                     statsObserver.disconnect();
                 }
             });
         }, { threshold: 0.2 });
 
-        const statsSection = document.getElementById('statsSection');
-        if (statsSection) statsObserver.observe(statsSection.parentElement);
+        // Observar la sección de stats
+        const statsSection = document.querySelector('.stats-section');
+        if (statsSection) {
+            statsObserver.observe(statsSection);
+        }
 
-        // ==================== TIMELINE SCROLL OBSERVER ====================
+        // ==================== CHARTS ====================
+        // ==================== PARALLAX TIMELINE ====================
         const timelineObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
+                    entry.target.classList.add('visible');
                 }
             });
-        }, { threshold: 0.1 });
+        }, { threshold: 0.1, rootMargin: '0px' });
 
-        document.querySelectorAll('.timeline-event-scroll').forEach(el => {
+        document.querySelectorAll('[data-scroll]').forEach(el => {
             timelineObserver.observe(el);
         });
 
-        // ==================== MAPA ====================
-        setTimeout(() => {
-            const mapEl = document.getElementById('interactive-map');
-            if (mapEl) {
-                const map = L.map('interactive-map').setView([20.9674, -89.6244], 11);
-                
-                L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-                    attribution: '© OpenStreetMap contributors © CARTO'
-                }).addTo(map);
-
-                const lugares = [
-                    { coords: [20.9674, -89.6244], nombre: '📱 Primer Contacto', desc: 'Instagram - Donde todo comenzó' },
-                    { coords: [20.9850, -89.6170], nombre: '💬 Primer Chat', desc: 'WhatsApp - Hablamos hasta la 1 AM' },
-                    { coords: [20.9970, -89.6250], nombre: '❤️ Primera Salida', desc: 'Nuestro primer encuentro' }
-                ];
-
-                lugares.forEach(lugar => {
-                    const customIcon = L.divIcon({
-                        html: '<div style="background: linear-gradient(135deg, #ff6b9d, #c06c84); width: 30px; height: 30px; border-radius: 50%; border: 3px solid white; box-shadow: 0 5px 15px rgba(255, 107, 157, 0.5);"></div>',
-                        className: '',
-                        iconSize: [30, 30]
-                    });
-
-                    const marker = L.marker(lugar.coords, { icon: customIcon }).addTo(map);
-                    marker.bindPopup(`<div style="text-align: center; padding: 10px;"><strong style="color: #ff6b9d; font-size: 1.1rem;">${lugar.nombre}</strong><br><span style="color: #666;">${lugar.desc}</span></div>`);
-                });
-            }
-        }, 2000);
-
-        // ==================== TYPEWRITER ====================
+        // ==================== TYPEWRITER EFFECT ====================
         const typewriterText = "Ahorita te he agarrado demasiado cariño y la verdad sí quiero un futuro contigo. Eres de las pocas personas en las que he coincidido en demasiadas cosas y eso me encanta. Contigo quiero hacer las cosas bien porque de verdad vales la pena. Te quiero mucho.";
         let typewriterIndex = 0;
 
@@ -1237,26 +1616,97 @@
             });
         });
 
-        const typewriterEl = document.getElementById('typewriterText');
-        if (typewriterEl) typewriterObserver.observe(typewriterEl.parentElement);
+        typewriterObserver.observe(document.querySelector('.typewriter-section'));
 
         function typeWriter() {
-            const el = document.getElementById('typewriterText');
-            if (typewriterIndex < typewriterText.length && el) {
-                el.innerHTML += typewriterText.charAt(typewriterIndex);
+            if (typewriterIndex < typewriterText.length) {
+                document.getElementById('typewriterText').innerHTML += typewriterText.charAt(typewriterIndex);
                 typewriterIndex++;
                 setTimeout(typeWriter, 50);
+            } else {
+                document.getElementById('typewriterText').classList.add('typing');
             }
         }
+
+        // ==================== EASTER EGGS ====================
+        const easterEggs = {
+            1: {
+                title: "¡Encontraste una Estrella! ⭐",
+                message: "Así como esta estrella, tú iluminas mi vida cada día. Eres mi luz en la oscuridad."
+            },
+            2: {
+                title: "¡Un Diamante Oculto! 💎",
+                message: "Como este diamante, nuestro amor es precioso, único e irrompible. Eres mi tesoro más valioso."
+            },
+            3: {
+                title: "¡Una Mariposa Secreta! 🦋",
+                message: "Como una mariposa, transformaste mi vida. Antes de ti, era solo una oruga esperando despertar."
+            }
+        };
+
+        function showEasterEgg(id) {
+            const modal = document.getElementById('easterEggModal');
+            document.getElementById('easterEggTitle').textContent = easterEggs[id].title;
+            document.getElementById('easterEggMessage').textContent = easterEggs[id].message;
+            modal.classList.add('active');
+            createConfetti();
+        }
+
+        function closeEasterEgg() {
+            document.getElementById('easterEggModal').classList.remove('active');
+        }
+
+        // ==================== CONFETTI ====================
+        function createConfetti() {
+            for (let i = 0; i < 150; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.style.position = 'fixed';
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.top = '-10px';
+                    confetti.style.width = Math.random() * 10 + 5 + 'px';
+                    confetti.style.height = confetti.style.width;
+                    confetti.style.background = ['#ff6b9d', '#c06c84', '#f67280', '#feca57', '#48dbfb'][Math.floor(Math.random() * 5)];
+                    confetti.style.opacity = Math.random();
+                    confetti.style.transform = 'rotate(' + Math.random() * 360 + 'deg)';
+                    confetti.style.zIndex = '9999';
+                    confetti.style.pointerEvents = 'none';
+                    
+                    document.body.appendChild(confetti);
+
+                    const fallAnimation = confetti.animate([
+                        { transform: 'translateY(0) rotate(0deg)', opacity: confetti.style.opacity },
+                        { transform: `translateY(${window.innerHeight + 20}px) rotate(${Math.random() * 720}deg)`, opacity: 0 }
+                    ], {
+                        duration: Math.random() * 2000 + 3000,
+                        easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+                    });
+
+                    fallAnimation.onfinish = () => confetti.remove();
+                }, i * 15);
+            }
+        }
+
+        // ==================== SCROLL TO TOP ON FINAL ====================
+        const finalObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    createConfetti();
+                }
+            });
+        });
+
+        finalObserver.observe(document.querySelector('.final-section'));
 
         // ==================== VALENTINE PROPOSAL ====================
         function revealValentineProposal() {
             const overlay = document.getElementById('valentineOverlay');
-            overlay.style.display = 'flex';
+            overlay.classList.add('active');
+            
+            // Explosión de corazones
             setTimeout(() => {
-                overlay.style.opacity = '1';
                 createHeartsExplosion();
-            }, 100);
+            }, 500);
         }
 
         function createHeartsExplosion() {
@@ -1279,8 +1729,9 @@
             }
         }
 
-        const heartFloatStyle = document.createElement('style');
-        heartFloatStyle.textContent = `
+        // Agregar animación de corazones flotantes
+        const style = document.createElement('style');
+        style.textContent = `
             @keyframes heartFloat {
                 0% {
                     transform: translateY(0) scale(0);
@@ -1295,7 +1746,7 @@
                 }
             }
         `;
-        document.head.appendChild(heartFloatStyle);
+        document.head.appendChild(style);
 
         function moveNoButton() {
             const btn = document.getElementById('btnNo');
@@ -1314,18 +1765,26 @@
         function handleYes() {
             const content = document.getElementById('valentineContent');
             const response = document.getElementById('valentineResponse');
-            const buttons = document.getElementById('valentineButtons');
-            const question = content.querySelector('h1');
+            const buttons = document.querySelector('.valentine-buttons');
+            const question = document.querySelector('.valentine-question');
             
+            // Ocultar pregunta y botones
             question.style.display = 'none';
             buttons.style.display = 'none';
+            
+            // Mostrar respuesta
             response.style.display = 'block';
             
-            createMassiveConfetti();
-            setTimeout(createFireworks, 500);
+            // Mega confetti
+            createMegaConfetti();
+            
+            // Fuegos artificiales
+            setTimeout(() => {
+                createFireworks();
+            }, 500);
         }
 
-        function createMassiveConfetti() {
+        function createMegaConfetti() {
             for (let i = 0; i < 300; i++) {
                 setTimeout(() => {
                     const confetti = document.createElement('div');
@@ -1360,16 +1819,13 @@
             const container = document.getElementById('fireworks');
             const colors = ['#ff6b9d', '#feca57', '#48dbfb', '#2ecc71', '#f67280'];
             
-            const interval = setInterval(() => {
+            setInterval(() => {
                 const centerX = Math.random() * container.offsetWidth;
                 const centerY = Math.random() * 200 + 50;
                 
                 for (let i = 0; i < 30; i++) {
                     const firework = document.createElement('div');
-                    firework.style.position = 'absolute';
-                    firework.style.width = '10px';
-                    firework.style.height = '10px';
-                    firework.style.borderRadius = '50%';
+                    firework.className = 'firework';
                     firework.style.left = centerX + 'px';
                     firework.style.top = centerY + 'px';
                     firework.style.background = colors[Math.floor(Math.random() * colors.length)];
@@ -1379,22 +1835,14 @@
                     const tx = Math.cos(angle) * velocity;
                     const ty = Math.sin(angle) * velocity;
                     
+                    firework.style.setProperty('--tx', tx + 'px');
+                    firework.style.setProperty('--ty', ty + 'px');
+                    
                     container.appendChild(firework);
                     
-                    const animation = firework.animate([
-                        { transform: 'translate(0, 0) scale(1)', opacity: 1 },
-                        { transform: `translate(${tx}px, ${ty}px) scale(0)`, opacity: 0 }
-                    ], {
-                        duration: 1000,
-                        easing: 'ease-out'
-                    });
-                    
-                    animation.onfinish = () => firework.remove();
+                    setTimeout(() => firework.remove(), 1000);
                 }
             }, 800);
-
-            // Detener después de 20 segundos
-            setTimeout(() => clearInterval(interval), 20000);
         }
     </script>
 </body>
