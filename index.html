@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -851,15 +851,6 @@
         </div>
     </section>
 
-    <script>
-        function scrollToTimeline(number) {
-            const element = document.getElementById('timeline' + number);
-            if (element) {
-                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-        }
-    </script>
-
     <!-- Cartas que se Abren -->
     <section class="letters-section">
         <h2 class="section-title">Cartas de Amor (Click para Abrir)</h2>
@@ -922,666 +913,94 @@
             </button>
         </div>
     </section>
-
-    <!-- QUIZ INTERACTIVO -->
-        // ==================== LOADER ====================
-        // Asegurarse de que el loader se quite incluso si 'load' no se dispara
-        function hideLoader() {
-            const loaderScreen = document.getElementById('loaderScreen');
-            if (loaderScreen) {
-                loaderScreen.style.opacity = '0';
-                setTimeout(() => {
-                    loaderScreen.style.display = 'none';
-                    startAmbientEffects();
+    <script>
+        // ============ LOADER SIMPLIFICADO ============
+        setTimeout(function() {
+            var loader = document.getElementById('loaderScreen');
+            if (loader) {
+                loader.style.opacity = '0';
+                setTimeout(function() { 
+                    loader.style.display = 'none'; 
                 }, 1000);
             }
-        }
+        }, 3000);
 
-        // Intentar con load
-        window.addEventListener('load', () => {
-            setTimeout(hideLoader, 2500);
-        });
-
-        // Backup: si no se dispara load en 5 segundos, quitar de todas formas
-        setTimeout(hideLoader, 5000);
-
-        // ==================== AMBIENT EFFECTS ====================
-        function startAmbientEffects() {
-            // Estrellas fugaces
-            setInterval(createShootingStar, 3000);
-            
-            // Polaroids cayendo
-            setTimeout(() => {
-                setInterval(createPolaroid, 8000);
-            }, 5000);
-        }
-
+        // ============ FUNCIONES BÁSICAS ============
         function createShootingStar() {
-            const star = document.createElement('div');
+            var star = document.createElement('div');
             star.className = 'shooting-star';
             star.style.left = Math.random() * 100 + '%';
             star.style.top = Math.random() * 50 + '%';
             document.body.appendChild(star);
-            setTimeout(() => star.remove(), 3000);
+            setTimeout(function() { star.remove(); }, 3000);
         }
 
         function createPolaroid() {
-            const polaroid = document.createElement('div');
+            var polaroid = document.createElement('div');
             polaroid.className = 'polaroid';
             polaroid.style.left = Math.random() * (window.innerWidth - 200) + 'px';
-            polaroid.innerHTML = `
-                <div class="polaroid-image">📷</div>
-                <div class="polaroid-caption">Momento especial juntos</div>
-            `;
+            polaroid.innerHTML = '<div class="polaroid-image">📷</div><div class="polaroid-caption">Momento especial juntos</div>';
             document.body.appendChild(polaroid);
-            setTimeout(() => polaroid.remove(), 5000);
+            setTimeout(function() { polaroid.remove(); }, 5000);
         }
 
-        // ==================== CUSTOM CURSOR WITH TRAIL ====================
-        const cursor = document.getElementById('customCursor');
-        let mouseX = 0, mouseY = 0;
+        function scrollToTimeline(number) {
+            var element = document.getElementById('timeline' + number);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
 
-        document.addEventListener('mousemove', (e) => {
+        // Iniciar efectos ambient
+        setTimeout(function() {
+            setInterval(createShootingStar, 3000);
+            setInterval(createPolaroid, 8000);
+        }, 4000);
+
+        // ============ CURSOR PERSONALIZADO ============
+        var cursor = document.getElementById('customCursor');
+        var mouseX = 0, mouseY = 0;
+
+        document.addEventListener('mousemove', function(e) {
             mouseX = e.clientX;
             mouseY = e.clientY;
-            cursor.style.left = mouseX + 'px';
-            cursor.style.top = mouseY + 'px';
+            if (cursor) {
+                cursor.style.left = mouseX + 'px';
+                cursor.style.top = mouseY + 'px';
+            }
             
-            // Trail effect
             if (Math.random() > 0.8) {
-                const trail = document.createElement('div');
+                var trail = document.createElement('div');
                 trail.className = 'cursor-trail';
                 trail.style.left = mouseX + 'px';
                 trail.style.top = mouseY + 'px';
                 document.body.appendChild(trail);
-                setTimeout(() => trail.remove(), 500);
+                setTimeout(function() { trail.remove(); }, 500);
             }
         });
 
-        document.querySelectorAll('button, a, .letter-envelope').forEach(el => {
-            el.addEventListener('mouseenter', () => cursor.style.transform = 'scale(2)');
-            el.addEventListener('mouseleave', () => cursor.style.transform = 'scale(1)');
+        document.querySelectorAll('button, a, .letter-envelope').forEach(function(el) {
+            el.addEventListener('mouseenter', function() { if (cursor) cursor.style.transform = 'scale(2)'; });
+            el.addEventListener('mouseleave', function() { if (cursor) cursor.style.transform = 'scale(1)'; });
         });
 
-        // ==================== SCROLL PROGRESS ====================
-        window.addEventListener('scroll', () => {
-            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            const scrolled = (winScroll / height) * 100;
-            document.getElementById('scrollProgress').style.width = scrolled + '%';
+        // ============ SCROLL PROGRESS ============
+        window.addEventListener('scroll', function() {
+            var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            var scrolled = (winScroll / height) * 100;
+            var progress = document.getElementById('scrollProgress');
+            if (progress) progress.style.width = scrolled + '%';
         });
 
-        // ==================== THEME TOGGLE ====================
+        // ============ THEME TOGGLE ============
         function toggleTheme() {
             document.body.classList.toggle('day-mode');
-            const icon = document.getElementById('themeIcon');
-            icon.textContent = document.body.classList.contains('day-mode') ? '☀️' : '🌙';
-        }
-
-        // ==================== 3D PARTICLES INTERACTIVAS ====================
-        const canvas = document.getElementById('particles-canvas');
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
-        
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        camera.position.z = 5;
-
-        const geometry = new THREE.BufferGeometry();
-        const vertices = [];
-        const colors = [];
-
-        for (let i = 0; i < 2000; i++) {
-            vertices.push(
-                Math.random() * 20 - 10,
-                Math.random() * 20 - 10,
-                Math.random() * 20 - 10
-            );
-            colors.push(Math.random(), 0.3 + Math.random() * 0.3, 0.5 + Math.random() * 0.5);
-        }
-
-        geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
-        geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
-
-        const material = new THREE.PointsMaterial({
-            size: 0.05,
-            vertexColors: true,
-            transparent: true,
-            opacity: 0.8
-        });
-
-        const particles = new THREE.Points(geometry, material);
-        scene.add(particles);
-
-        function animateParticles() {
-            requestAnimationFrame(animateParticles);
-            
-            // Partículas siguen el mouse
-            particles.rotation.x += (mouseY * 0.00001);
-            particles.rotation.y += (mouseX * 0.00001);
-            
-            renderer.render(scene, camera);
-        }
-        animateParticles();
-
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-
-        // ==================== WORD CLOUD ====================
-        const words = [
-            { text: 'Te Amo', size: 80, color: '#ff6b9d' },
-            { text: 'Preciosa', size: 60, color: '#c06c84' },
-            { text: 'Mi Vida', size: 50, color: '#f67280' },
-            { text: 'Para Ti Nunca', size: 45, color: '#feca57' },
-            { text: 'Buenos Días', size: 40, color: '#48dbfb' },
-            { text: 'Te Quiero Mucho', size: 55, color: '#ff9ff3' },
-            { text: 'Mi Amor', size: 65, color: '#54a0ff' },
-            { text: 'Futuro Juntos', size: 50, color: '#00d2d3' },
-            { text: 'Preciosa', size: 45, color: '#5f27cd' },
-            { text: 'Te Extraño', size: 40, color: '#1dd1a1' },
-            { text: 'Mi Reina', size: 35, color: '#ee5a6f' },
-            { text: 'Siempre', size: 70, color: '#ff6348' }
-        ];
-
-        const wordCloud = document.getElementById('wordCloud');
-        words.forEach((word, index) => {
-            const wordEl = document.createElement('span');
-            wordEl.className = 'word';
-            wordEl.textContent = word.text;
-            wordEl.style.fontSize = word.size + 'px';
-            wordEl.style.color = word.color;
-            wordEl.style.animationDelay = (index * 0.1) + 's';
-            wordCloud.appendChild(wordEl);
-        });
-
-        // ==================== WHATSAPP CHAT ====================
-        const whatsappConversation = [
-            { type: 'received', text: 'Holi 🫶', time: '12:35 AM', delay: 0.5 },
-            { type: 'sent', text: 'Holiiii', time: '12:35 AM', delay: 1 },
-            { type: 'sent', text: 'Ya te vas a mimir?', time: '12:39 AM', delay: 1.5 },
-            { type: 'sent', text: 'Para ti nunca', time: '12:40 AM', delay: 2 },
-            { type: 'received', text: 'Ayyy 🫶', time: '12:41 AM', delay: 2.5 },
-            { type: 'sent', text: 'Te quieroooo', time: '1:01 AM', delay: 3 },
-            { type: 'received', text: 'Yo igual ya deseo verte', time: '12:59 AM', delay: 3.5 },
-            { type: 'sent', text: 'Buenos días preciosa', time: '8:32 AM', delay: 4 },
-            { type: 'received', text: 'Buenos días mi amor', time: '8:35 AM', delay: 4.5 },
-            { type: 'sent', text: 'Te amo muchísimo', time: '9:00 AM', delay: 5 }
-        ];
-
-        const messagesContainer = document.getElementById('whatsappMessages');
-        whatsappConversation.forEach((msg, index) => {
-            setTimeout(() => {
-                const msgEl = document.createElement('div');
-                msgEl.className = `whatsapp-message ${msg.type}`;
-                msgEl.style.animationDelay = '0s';
-                msgEl.innerHTML = `
-                    <div class="whatsapp-bubble">
-                        ${msg.text}
-                        <div class="whatsapp-time">${msg.time}</div>
-                    </div>
-                `;
-                messagesContainer.appendChild(msgEl);
-                msgEl.style.opacity = '1';
-                messagesContainer.scrollTop = messagesContainer.scrollHeight;
-            }, msg.delay * 1000);
-        });
-
-        // ==================== CERTIFICATE PDF ====================
-        function downloadCertificate() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            
-            // Añadir contenido al PDF
-            doc.setFontSize(30);
-            doc.text('Certificado de Amor Eterno', 105, 40, { align: 'center' });
-            
-            doc.setFontSize(16);
-            doc.text('Se certifica que Joss es oficialmente', 105, 80, { align: 'center' });
-            doc.text('la dueña del corazón de Cesar', 105, 95, { align: 'center' });
-            
-            doc.setFontSize(14);
-            doc.text('Desde el 13 de Julio, 2025', 105, 120, { align: 'center' });
-            doc.text('hasta el infinito y más allá', 105, 135, { align: 'center' });
-            
-            doc.text('Este amor es inquebrantable, verdadero y eterno.', 105, 160, { align: 'center' });
-            doc.text('Válido por toda la vida.', 105, 175, { align: 'center' });
-            
-            doc.setFontSize(20);
-            doc.text('Con todo mi amor, Cesar G. ❤️', 105, 220, { align: 'center' });
-            
-            doc.save('Certificado_de_Amor.pdf');
-        }
-
-        // ==================== START JOURNEY ====================
-        function startJourney() {
-            const wordCloudSection = document.querySelector('.word-cloud-section');
-            wordCloudSection.scrollIntoView({ behavior: 'smooth' });
-            
-            // Crear confetti inicial
-            createMegaConfetti();
-        }
-
-        function createMegaConfetti() {
-            for (let i = 0; i < 100; i++) {
-                setTimeout(() => {
-                    const confetti = document.createElement('div');
-                    confetti.style.position = 'fixed';
-                    confetti.style.left = Math.random() * 100 + 'vw';
-                    confetti.style.top = '-10px';
-                    confetti.style.width = Math.random() * 10 + 5 + 'px';
-                    confetti.style.height = confetti.style.width;
-                    confetti.style.background = ['#ff6b9d', '#c06c84', '#f67280', '#feca57', '#48dbfb'][Math.floor(Math.random() * 5)];
-                    confetti.style.opacity = Math.random();
-                    confetti.style.transform = 'rotate(' + Math.random() * 360 + 'deg)';
-                    confetti.style.zIndex = '9999';
-                    confetti.style.pointerEvents = 'none';
-                    confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
-                    
-                    document.body.appendChild(confetti);
-
-                    const fallAnimation = confetti.animate([
-                        { transform: 'translateY(0) rotate(0deg)', opacity: confetti.style.opacity },
-                        { transform: `translateY(${window.innerHeight + 20}px) rotate(${Math.random() * 720}deg)`, opacity: 0 }
-                    ], {
-                        duration: Math.random() * 2000 + 2000,
-                        easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'
-                    });
-
-                    fallAnimation.onfinish = () => confetti.remove();
-                }, i * 15);
+            var icon = document.getElementById('themeIcon');
+            if (icon) {
+                icon.textContent = document.body.classList.contains('day-mode') ? '☀️' : '🌙';
             }
         }
-    </script>
-    
-    <!-- CONTINUACIÓN CON MÁS SECCIONES -->
-
-    <!-- Counter Section -->
-    <section class="section-dark" style="padding: 100px 20px;">
-        <div style="text-align: center; margin-bottom: 80px;">
-            <h2 class="section-title">Nuestro Tiempo Juntos</h2>
-            <p style="font-size: 1.3rem; opacity: 0.8;">Cada segundo a tu lado es un regalo</p>
-        </div>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto;">
-            <div style="background: linear-gradient(135deg, rgba(255, 107, 157, 0.1), rgba(192, 108, 132, 0.1)); backdrop-filter: blur(10px); padding: 40px; border-radius: 20px; text-align: center; border: 2px solid rgba(255, 107, 157, 0.3); position: relative; overflow: hidden;">
-                <div style="content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: linear-gradient(45deg, transparent, rgba(255, 107, 157, 0.1), transparent); transform: rotate(45deg); animation: shine 3s infinite;"></div>
-                <div style="font-size: 4rem; font-weight: 700; background: linear-gradient(45deg, #ff6b9d, #feca57); -webkit-background-clip: text; -webkit-text-fill-color: transparent; position: relative;" id="days">0</div>
-                <div style="font-size: 1.2rem; margin-top: 10px; opacity: 0.7; position: relative;">DÍAS</div>
-            </div>
-            <div style="background: linear-gradient(135deg, rgba(255, 107, 157, 0.1), rgba(192, 108, 132, 0.1)); backdrop-filter: blur(10px); padding: 40px; border-radius: 20px; text-align: center; border: 2px solid rgba(255, 107, 157, 0.3);">
-                <div style="font-size: 4rem; font-weight: 700; background: linear-gradient(45deg, #ff6b9d, #feca57); -webkit-background-clip: text; -webkit-text-fill-color: transparent;" id="hours">0</div>
-                <div style="font-size: 1.2rem; margin-top: 10px; opacity: 0.7;">HORAS</div>
-            </div>
-            <div style="background: linear-gradient(135deg, rgba(255, 107, 157, 0.1), rgba(192, 108, 132, 0.1)); backdrop-filter: blur(10px); padding: 40px; border-radius: 20px; text-align: center; border: 2px solid rgba(255, 107, 157, 0.3);">
-                <div style="font-size: 4rem; font-weight: 700; background: linear-gradient(45deg, #ff6b9d, #feca57); -webkit-background-clip: text; -webkit-text-fill-color: transparent;" id="minutes">0</div>
-                <div style="font-size: 1.2rem; margin-top: 10px; opacity: 0.7;">MINUTOS</div>
-            </div>
-            <div style="background: linear-gradient(135deg, rgba(255, 107, 157, 0.1), rgba(192, 108, 132, 0.1)); backdrop-filter: blur(10px); padding: 40px; border-radius: 20px; text-align: center; border: 2px solid rgba(255, 107, 157, 0.3);">
-                <div style="font-size: 4rem; font-weight: 700; background: linear-gradient(45deg, #ff6b9d, #feca57); -webkit-background-clip: text; -webkit-text-fill-color: transparent;" id="seconds">0</div>
-                <div style="font-size: 1.2rem; margin-top: 10px; opacity: 0.7;">SEGUNDOS</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- QUIZ INTERACTIVO -->
-    <section class="section-light" id="quizSection" style="min-height: 100vh; padding: 100px 20px; display: none;">
-        <div style="max-width: 800px; margin: 0 auto; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); padding: 50px; border-radius: 30px; box-shadow: 0 20px 60px rgba(0,0,0,0.1);">
-            <h2 style="font-family: 'Playfair Display', serif; font-size: 3rem; text-align: center; margin-bottom: 3rem; background: linear-gradient(45deg, #ff6b9d, #feca57); -webkit-background-clip: text; -webkit-text-fill-color: transparent; color: #333;">¿Cuánto Sabes de Nosotros?</h2>
-            <div id="quizContent"></div>
-        </div>
-    </section>
-
-    <!-- STATS CON GRÁFICAS -->
-    <section class="section-dark" style="padding: 100px 20px;">
-        <div style="text-align: center; margin-bottom: 80px;">
-            <h2 class="section-title">Nuestra Historia en Números</h2>
-            <p style="font-size: 1.3rem; opacity: 0.8;">Estadísticas de un amor épico</p>
-        </div>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; max-width: 1400px; margin: 0 auto;" id="statsSection">
-            <div style="background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); padding: 40px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1); text-align: center; transition: transform 0.3s ease;">
-                <div style="font-size: 4rem; font-weight: 700; background: linear-gradient(45deg, #ff6b9d, #feca57); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px;" id="stat1">209</div>
-                <div style="font-size: 1.2rem; opacity: 0.7;">Días Juntos 🌅</div>
-            </div>
-            <div style="background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); padding: 40px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1); text-align: center;">
-                <div style="font-size: 4rem; font-weight: 700; background: linear-gradient(45deg, #ff6b9d, #feca57); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px;" id="stat2">15789</div>
-                <div style="font-size: 1.2rem; opacity: 0.7;">Mensajes de Amor 💬</div>
-            </div>
-            <div style="background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); padding: 40px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1); text-align: center;">
-                <div style="font-size: 4rem; font-weight: 700; background: linear-gradient(45deg, #ff6b9d, #feca57); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px;" id="stat3">387</div>
-                <div style="font-size: 1.2rem; opacity: 0.7;">"Te Amo" Dichos ❤️</div>
-            </div>
-            <div style="background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); padding: 40px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1); text-align: center;">
-                <div style="font-size: 4rem; font-weight: 700; background: linear-gradient(45deg, #ff6b9d, #feca57); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px;">∞</div>
-                <div style="font-size: 1.2rem; opacity: 0.7;">Momentos Especiales 💕</div>
-            </div>
-            <div style="background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); padding: 40px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1);">
-                <div style="height: 200px; width: 100%; position: relative;">
-                    <canvas id="monthlyChart"></canvas>
-                </div>
-                <div style="font-size: 1.2rem; opacity: 0.7; margin-top: 20px; text-align: center;">Momentos Felices por Mes</div>
-            </div>
-            <div style="background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); padding: 40px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1);">
-                <div style="height: 200px; width: 100%; position: relative;">
-                    <canvas id="activitiesChart"></canvas>
-                </div>
-                <div style="font-size: 1.2rem; opacity: 0.7; margin-top: 20px; text-align: center;">Actividades Favoritas</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- PARALLAX TIMELINE COMPLETO -->
-    <section class="section-light" style="padding: 100px 20px; background: #000;">
-        <h2 style="font-family: 'Playfair Display', serif; font-size: 4rem; text-align: center; margin-bottom: 100px; background: linear-gradient(45deg, #ff6b9d, #c06c84); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Momentos Que Marcaron Nuestra Historia</h2>
-        <div style="max-width: 1200px; margin: 0 auto; position: relative;">
-            <div class="timeline-event-scroll" style="margin-bottom: 150px; display: flex; align-items: center; gap: 50px; opacity: 0; transition: opacity 0.8s ease;">
-                <div style="width: 400px; height: 300px; border-radius: 20px; overflow: hidden; position: relative; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);">
-                    <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #ff6b9d, #c06c84); display: flex; align-items: center; justify-content: center; font-size: 4rem;">📱</div>
-                </div>
-                <div style="flex: 1;">
-                    <div style="font-size: 1rem; color: #ff6b9d; font-weight: 600; margin-bottom: 10px;">13 de Julio, 2025</div>
-                    <h3 style="font-family: 'Playfair Display', serif; font-size: 2.5rem; margin-bottom: 15px; color: white;">Todo Comenzó en Instagram</h3>
-                    <p style="font-size: 1.1rem; line-height: 1.8; color: rgba(255, 255, 255, 0.8);">Un DM, una conversación, una conexión instantánea. Desde ese día supe que eras diferente.</p>
-                </div>
-            </div>
-
-            <div class="timeline-event-scroll" style="margin-bottom: 150px; display: flex; align-items: center; gap: 50px; opacity: 0; flex-direction: row-reverse; transition: opacity 0.8s ease;">
-                <div style="width: 400px; height: 300px; border-radius: 20px; overflow: hidden; position: relative; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);">
-                    <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #f67280, #c06c84); display: flex; align-items: center; justify-content: center; font-size: 4rem;">💬</div>
-                </div>
-                <div style="flex: 1;">
-                    <div style="font-size: 1rem; color: #ff6b9d; font-weight: 600; margin-bottom: 10px;">28 de Julio, 2025</div>
-                    <h3 style="font-family: 'Playfair Display', serif; font-size: 2.5rem; margin-bottom: 15px; color: white;">El Primer "Holiiii"</h3>
-                    <p style="font-size: 1.1rem; line-height: 1.8; color: rgba(255, 255, 255, 0.8);">WhatsApp. Hablamos hasta la 1 AM. Cada "buenos días preciosa" se volvió mi rutina favorita.</p>
-                </div>
-            </div>
-
-            <div class="timeline-event-scroll" style="margin-bottom: 150px; display: flex; align-items: center; gap: 50px; opacity: 0; transition: opacity 0.8s ease;">
-                <div style="width: 400px; height: 300px; border-radius: 20px; overflow: hidden; position: relative; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);">
-                    <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #feca57, #ff6b9d); display: flex; align-items: center; justify-content: center; font-size: 4rem;">🎂</div>
-                </div>
-                <div style="flex: 1;">
-                    <div style="font-size: 1rem; color: #ff6b9d; font-weight: 600; margin-bottom: 10px;">31 de Julio, 2025</div>
-                    <h3 style="font-family: 'Playfair Display', serif; font-size: 2.5rem; margin-bottom: 15px; color: white;">Tu Cumpleaños</h3>
-                    <p style="font-size: 1.1rem; line-height: 1.8; color: rgba(255, 255, 255, 0.8);">El día que te dije que quería un futuro contigo. Eres de las pocas personas con las que he coincidido en todo.</p>
-                </div>
-            </div>
-
-            <div class="timeline-event-scroll" style="margin-bottom: 150px; display: flex; align-items: center; gap: 50px; opacity: 0; flex-direction: row-reverse; transition: opacity 0.8s ease;">
-                <div style="width: 400px; height: 300px; border-radius: 20px; overflow: hidden; position: relative; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);">
-                    <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #ff6b9d, #f67280); display: flex; align-items: center; justify-content: center; font-size: 4rem;">❤️</div>
-                </div>
-                <div style="flex: 1;">
-                    <div style="font-size: 1rem; color: #ff6b9d; font-weight: 600; margin-bottom: 10px;">2 de Agosto, 2025</div>
-                    <h3 style="font-family: 'Playfair Display', serif; font-size: 2.5rem; margin-bottom: 15px; color: white;">El Primer "Te Amo"</h3>
-                    <p style="font-size: 1.1rem; line-height: 1.8; color: rgba(255, 255, 255, 0.8);">El día que nuestros corazones hablaron más fuerte. "Te amo" se convirtió en una promesa.</p>
-                </div>
-            </div>
-
-            <div class="timeline-event-scroll" style="display: flex; align-items: center; gap: 50px; opacity: 0; transition: opacity 0.8s ease;">
-                <div style="width: 400px; height: 300px; border-radius: 20px; overflow: hidden; position: relative; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);">
-                    <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #c06c84, #ff6b9d); display: flex; align-items: center; justify-content: center; font-size: 4rem;">💕</div>
-                </div>
-                <div style="flex: 1;">
-                    <div style="font-size: 1rem; color: #ff6b9d; font-weight: 600; margin-bottom: 10px;">Hasta Hoy</div>
-                    <h3 style="font-family: 'Playfair Display', serif; font-size: 2.5rem; margin-bottom: 15px; color: white;">Cada Día Contigo</h3>
-                    <p style="font-size: 1.1rem; line-height: 1.8; color: rgba(255, 255, 255, 0.8);">Esta es solo el inicio de nuestra historia. Lo mejor está por venir.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- FLIP GALLERY -->
-    <section class="section-dark" style="padding: 100px 20px;">
-        <div style="text-align: center; margin-bottom: 80px;">
-            <h2 class="section-title">Por Qué Me Enamoré de Ti</h2>
-            <p style="font-size: 1.3rem; opacity: 0.8;">Pasa el cursor sobre cada tarjeta</p>
-        </div>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; max-width: 1200px; margin: 0 auto;">
-            
-            <!-- Card 1 -->
-            <div style="height: 400px; perspective: 1000px; cursor: pointer;" onmouseenter="this.querySelector('.flip-inner').style.transform='rotateY(180deg)'" onmouseleave="this.querySelector('.flip-inner').style.transform='rotateY(0)'">
-                <div class="flip-inner" style="position: relative; width: 100%; height: 100%; transition: transform 0.8s; transform-style: preserve-3d;">
-                    <div style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 20px; background: linear-gradient(135deg, #ff6b9d, #c06c84); display: flex; align-items: center; justify-content: center; font-size: 5rem; color: white; opacity: 0.8;">
-                        01
-                    </div>
-                    <div style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 20px; background: linear-gradient(135deg, #667eea, #764ba2); transform: rotateY(180deg); padding: 30px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
-                        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 20px;">Tu Forma de Ser</h3>
-                        <p style="font-size: 1.1rem; line-height: 1.8;">Desde el primer día me dijiste "para ti nunca" cuando pensé que estabas ocupada. Ese detalle me hizo darme cuenta de lo especial que eres.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 2 -->
-            <div style="height: 400px; perspective: 1000px; cursor: pointer;" onmouseenter="this.querySelector('.flip-inner').style.transform='rotateY(180deg)'" onmouseleave="this.querySelector('.flip-inner').style.transform='rotateY(0)'">
-                <div class="flip-inner" style="position: relative; width: 100%; height: 100%; transition: transform 0.8s; transform-style: preserve-3d;">
-                    <div style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 20px; background: linear-gradient(135deg, #ff6b9d, #c06c84); display: flex; align-items: center; justify-content: center; font-size: 5rem; color: white; opacity: 0.8;">
-                        02
-                    </div>
-                    <div style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 20px; background: linear-gradient(135deg, #667eea, #764ba2); transform: rotateY(180deg); padding: 30px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
-                        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 20px;">Cómo Me Haces Sentir</h3>
-                        <p style="font-size: 1.1rem; line-height: 1.8;">"Me encantass más a mii, te amoo mucho niño lindo" - cada mensaje tuyo me hace sentir el hombre más afortunado del mundo.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 3 -->
-            <div style="height: 400px; perspective: 1000px; cursor: pointer;" onmouseenter="this.querySelector('.flip-inner').style.transform='rotateY(180deg)'" onmouseleave="this.querySelector('.flip-inner').style.transform='rotateY(0)'">
-                <div class="flip-inner" style="position: relative; width: 100%; height: 100%; transition: transform 0.8s; transform-style: preserve-3d;">
-                    <div style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 20px; background: linear-gradient(135deg, #ff6b9d, #c06c84); display: flex; align-items: center; justify-content: center; font-size: 5rem; color: white; opacity: 0.8;">
-                        03
-                    </div>
-                    <div style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 20px; background: linear-gradient(135deg, #667eea, #764ba2); transform: rotateY(180deg); padding: 30px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
-                        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 20px;">Tus Detalles</h3>
-                        <p style="font-size: 1.1rem; line-height: 1.8;">Preguntas "¿Ya desayunaste?", "¿Cómo amaneciste?" - esos pequeños detalles que demuestran cuánto te importo.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 4 -->
-            <div style="height: 400px; perspective: 1000px; cursor: pointer;" onmouseenter="this.querySelector('.flip-inner').style.transform='rotateY(180deg)'" onmouseleave="this.querySelector('.flip-inner').style.transform='rotateY(0)'">
-                <div class="flip-inner" style="position: relative; width: 100%; height: 100%; transition: transform 0.8s; transform-style: preserve-3d;">
-                    <div style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 20px; background: linear-gradient(135deg, #ff6b9d, #c06c84); display: flex; align-items: center; justify-content: center; font-size: 5rem; color: white; opacity: 0.8;">
-                        04
-                    </div>
-                    <div style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 20px; background: linear-gradient(135deg, #667eea, #764ba2); transform: rotateY(180deg); padding: 30px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
-                        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 20px;">Tu Sinceridad</h3>
-                        <p style="font-size: 1.1rem; line-height: 1.8;">Siempre tratando de expresar todo lo que sientes. Tu honestidad y transparencia son cosas que admiro profundamente.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 5 -->
-            <div style="height: 400px; perspective: 1000px; cursor: pointer;" onmouseenter="this.querySelector('.flip-inner').style.transform='rotateY(180deg)'" onmouseleave="this.querySelector('.flip-inner').style.transform='rotateY(0)'">
-                <div class="flip-inner" style="position: relative; width: 100%; height: 100%; transition: transform 0.8s; transform-style: preserve-3d;">
-                    <div style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 20px; background: linear-gradient(135deg, #ff6b9d, #c06c84); display: flex; align-items: center; justify-content: center; font-size: 5rem; color: white; opacity: 0.8;">
-                        05
-                    </div>
-                    <div style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 20px; background: linear-gradient(135deg, #667eea, #764ba2); transform: rotateY(180deg); padding: 30px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
-                        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 20px;">Nuestra Conexión</h3>
-                        <p style="font-size: 1.1rem; line-height: 1.8;">Eres de las pocas personas con las que he coincidido en demasiadas cosas. Hablamos hasta el amanecer sin darnos cuenta.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 6 -->
-            <div style="height: 400px; perspective: 1000px; cursor: pointer;" onmouseenter="this.querySelector('.flip-inner').style.transform='rotateY(180deg)'" onmouseleave="this.querySelector('.flip-inner').style.transform='rotateY(0)'">
-                <div class="flip-inner" style="position: relative; width: 100%; height: 100%; transition: transform 0.8s; transform-style: preserve-3d;">
-                    <div style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 20px; background: linear-gradient(135deg, #ff6b9d, #c06c84); display: flex; align-items: center; justify-content: center; font-size: 5rem; color: white; opacity: 0.8;">
-                        06
-                    </div>
-                    <div style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 20px; background: linear-gradient(135deg, #667eea, #764ba2); transform: rotateY(180deg); padding: 30px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
-                        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 20px;">Nuestro Futuro</h3>
-                        <p style="font-size: 1.1rem; line-height: 1.8;">Desde el día de tu cumpleaños supe que quiero un futuro contigo. Contigo quiero hacer las cosas bien.</p>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </section>
-
-    <!-- MAPA INTERACTIVO -->
-    <section class="section-light" style="padding: 100px 20px; background: linear-gradient(180deg, #000 0%, #0f3460 100%);">
-        <div style="text-align: center; margin-bottom: 50px;">
-            <h2 class="section-title">Lugares Que Guardan Nuestra Historia</h2>
-            <p style="font-size: 1.3rem; opacity: 0.8; color: white;">Cada punto es un capítulo de nuestro amor</p>
-        </div>
-        <div id="interactive-map" style="max-width: 1400px; margin: 50px auto 0; height: 600px; border-radius: 30px; overflow: hidden; box-shadow: 0 30px 100px rgba(255, 107, 157, 0.3);"></div>
-    </section>
-
-    <!-- TYPEWRITER -->
-    <section style="min-height: 100vh; display: flex; justify-content: center; align-items: center; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); padding: 50px 20px;">
-        <div style="max-width: 900px; text-align: center;">
-            <div id="typewriterText" style="font-family: 'Playfair Display', serif; font-size: 3rem; line-height: 1.6; margin-bottom: 50px; color: white;"></div>
-        </div>
-    </section>
-
-    <!-- FINAL CON SPOTIFY -->
-    <section style="min-height: 100vh; display: flex; justify-content: center; align-items: center; background: #000; position: relative; overflow: hidden; padding: 50px 20px;">
-        <div style="text-align: center; z-index: 1; max-width: 1000px;">
-            <h2 style="font-family: 'Playfair Display', serif; font-size: 5rem; margin-bottom: 30px; animation: finalPulse 2s ease-in-out infinite; color: white;">Te Amo ❤️</h2>
-            <p style="font-size: 1.8rem; line-height: 2; margin-bottom: 50px; color: white;">
-                Gracias por cada sonrisa, cada abrazo, cada momento compartido.<br>
-                Gracias por ser mi compañera, mi confidente, mi mejor amiga, mi amor.<br>
-                Esta presentación es solo un pequeño reflejo de lo que siento por ti.<br><br>
-                <strong>Eres mi para siempre.</strong>
-            </p>
-            
-            <div style="margin-top: 50px; border-radius: 20px; overflow: hidden;">
-                <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/37i9dQZF1DX0Yxoavh5qJV?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-            </div>
-        </div>
-    </section>
-
-    <style>
-        @keyframes finalPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-        @keyframes shine {
-            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
-        }
-    </style>
-
-    <!-- PROPUESTA SAN VALENTÍN -->
-    <section class="section-dark" style="padding: 100px 20px;">
-        <div style="text-align: center; margin-bottom: 80px;">
-            <h2 class="section-title">Nuestro Tiempo Juntos</h2>
-            <p style="font-size: 1.3rem; opacity: 0.8;">Cada segundo a tu lado es un regalo</p>
-        </div>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto;">
-            <div style="background: linear-gradient(135deg, rgba(255, 107, 157, 0.1), rgba(192, 108, 132, 0.1)); backdrop-filter: blur(10px); padding: 40px; border-radius: 20px; text-align: center; border: 2px solid rgba(255, 107, 157, 0.3);">
-                <div style="font-size: 4rem; font-weight: 700; background: linear-gradient(45deg, #ff6b9d, #feca57); -webkit-background-clip: text; -webkit-text-fill-color: transparent;" id="days">0</div>
-                <div style="font-size: 1.2rem; margin-top: 10px; opacity: 0.7;">DÍAS</div>
-            </div>
-            <div style="background: linear-gradient(135deg, rgba(255, 107, 157, 0.1), rgba(192, 108, 132, 0.1)); backdrop-filter: blur(10px); padding: 40px; border-radius: 20px; text-align: center; border: 2px solid rgba(255, 107, 157, 0.3);">
-                <div style="font-size: 4rem; font-weight: 700; background: linear-gradient(45deg, #ff6b9d, #feca57); -webkit-background-clip: text; -webkit-text-fill-color: transparent;" id="hours">0</div>
-                <div style="font-size: 1.2rem; margin-top: 10px; opacity: 0.7;">HORAS</div>
-            </div>
-            <div style="background: linear-gradient(135deg, rgba(255, 107, 157, 0.1), rgba(192, 108, 132, 0.1)); backdrop-filter: blur(10px); padding: 40px; border-radius: 20px; text-align: center; border: 2px solid rgba(255, 107, 157, 0.3);">
-                <div style="font-size: 4rem; font-weight: 700; background: linear-gradient(45deg, #ff6b9d, #feca57); -webkit-background-clip: text; -webkit-text-fill-color: transparent;" id="minutes">0</div>
-                <div style="font-size: 1.2rem; margin-top: 10px; opacity: 0.7;">MINUTOS</div>
-            </div>
-            <div style="background: linear-gradient(135deg, rgba(255, 107, 157, 0.1), rgba(192, 108, 132, 0.1)); backdrop-filter: blur(10px); padding: 40px; border-radius: 20px; text-align: center; border: 2px solid rgba(255, 107, 157, 0.3);">
-                <div style="font-size: 4rem; font-weight: 700; background: linear-gradient(45deg, #ff6b9d, #feca57); -webkit-background-clip: text; -webkit-text-fill-color: transparent;" id="seconds">0</div>
-                <div style="font-size: 1.2rem; margin-top: 10px; opacity: 0.7;">SEGUNDOS</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- PROPUESTA SAN VALENTÍN -->
-    <section class="section-light" style="min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 100px 20px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
-        <h2 class="section-title" style="color: white; margin-bottom: 50px;">Pero Espera... Hay Algo Más Importante</h2>
-        <button onclick="revealValentineProposal()" style="padding: 25px 60px; font-size: 1.5rem; background: white; color: #f5576c; border: none; border-radius: 50px; cursor: pointer; font-weight: 700; box-shadow: 0 20px 60px rgba(0,0,0,0.3); transition: all 0.3s ease; animation: pulse 2s infinite;">
-            Descubre la Sorpresa Final 💕
-        </button>
-    </section>
-
-    <!-- VALENTINE OVERLAY -->
-    <div id="valentineOverlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0, 0, 0, 0.98); z-index: 10000; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.5s ease;">
-        <div style="text-align: center; position: relative; z-index: 2;">
-            <div id="heartsExplosion" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1;"></div>
-            
-            <div id="valentineContent">
-                <h1 style="font-family: 'Playfair Display', serif; font-size: 5rem; background: linear-gradient(45deg, #ff6b9d, #feca57, #ff6b9d); background-size: 200% 200%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: gradientShift 3s ease infinite, scaleIn 1s ease; margin-bottom: 50px;">
-                    ¿Quieres ser mi San Valentín?
-                </h1>
-                
-                <div style="display: flex; gap: 30px; justify-content: center; margin-top: 50px;" id="valentineButtons">
-                    <button onclick="handleYes()" id="btnYes" style="padding: 25px 60px; font-size: 1.5rem; border: none; border-radius: 50px; font-weight: 700; cursor: pointer; background: linear-gradient(135deg, #2ecc71, #27ae60); color: white; box-shadow: 0 20px 60px rgba(46, 204, 113, 0.4); animation: bounceYes 2s infinite;">
-                        ¡SÍ! 💕
-                    </button>
-                    <button onmouseover="moveNoButton()" onclick="moveNoButton()" id="btnNo" style="padding: 25px 60px; font-size: 1.5rem; border: none; border-radius: 50px; font-weight: 700; cursor: pointer; background: linear-gradient(135deg, #95a5a6, #7f8c8d); color: white; box-shadow: 0 20px 60px rgba(149, 165, 166, 0.3);">
-                        No
-                    </button>
-                </div>
-
-                <div id="valentineResponse" style="display: none; animation: responseAppear 1s ease;">
-                    <h2 style="font-family: 'Playfair Display', serif; font-size: 4rem; background: linear-gradient(45deg, #ff6b9d, #feca57); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 30px; animation: celebrate 1s ease infinite;">
-                        ¡SABÍA QUE DIRÍAS QUE SÍ! 🎉
-                    </h2>
-                    <p style="font-size: 1.8rem; line-height: 2; max-width: 800px; margin: 0 auto;">
-                        Este San Valentín será inolvidable, porque lo pasaré contigo.<br>
-                        Te amo más de lo que las palabras pueden expresar ❤️
-                    </p>
-                    <div id="fireworks" style="margin-top: 50px; height: 300px; position: relative;"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <style>
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-
-        @keyframes scaleIn {
-            from {
-                transform: scale(0);
-                opacity: 0;
-            }
-            to {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-
-        @keyframes bounceYes {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        @keyframes responseAppear {
-            from {
-                transform: scale(0) rotate(-180deg);
-                opacity: 0;
-            }
-            to {
-                transform: scale(1) rotate(0);
-                opacity: 1;
-            }
-        }
-
-        @keyframes celebrate {
-            0%, 100% { transform: rotate(-5deg); }
-            50% { transform: rotate(5deg); }
-        }
-
-        @keyframes messageSlide {
-            to { opacity: 1; }
-        }
-    </style>
-
-    <script>
-        // ==================== COUNTER ====================
         function updateCounter() {
             const startDate = new Date('2025-07-13T00:00:00');
             const now = new Date();
