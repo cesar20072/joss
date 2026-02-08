@@ -691,59 +691,6 @@
             box-shadow: 0 10px 30px rgba(255, 107, 157, 0.4);
         }
 
-        /* MUSIC PLAYER MEJORADO */
-        .music-player {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 300px;
-            background: rgba(0, 0, 0, 0.9);
-            backdrop-filter: blur(10px);
-            padding: 20px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(255, 107, 157, 0.5);
-            z-index: 1000;
-            transition: all 0.3s ease;
-        }
-
-        .music-player.minimized {
-            width: 60px;
-            height: 60px;
-            padding: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-        }
-
-        .music-controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .music-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--primary);
-            border: none;
-            color: white;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .music-btn:hover {
-            transform: scale(1.1);
-        }
-
-        .music-track-name {
-            margin-bottom: 15px;
-            font-size: 0.9rem;
-            text-align: center;
-        }
-
         /* SCROLL PROGRESS */
         .scroll-progress {
             position: fixed;
@@ -845,34 +792,73 @@
         </div>
     </section>
 
-    <!-- Timeline Arrastrable -->
+    <!-- Timeline con Botones -->
     <section class="draggable-timeline-section">
-        <h2 class="section-title">Nuestra Línea del Tiempo (Arrastra →)</h2>
-        <div class="timeline-drag-container" id="timelineDrag">
-            <div class="timeline-track" id="timelineTrack">
-                <div class="timeline-card-drag">
-                    <h3>📱 13 de Julio, 2025</h3>
-                    <p>Todo comenzó en Instagram. Un DM que cambiaría nuestras vidas para siempre.</p>
-                </div>
-                <div class="timeline-card-drag">
-                    <h3>💬 28 de Julio, 2025</h3>
-                    <p>"Holiiii" - El primer mensaje en WhatsApp. Hablamos hasta la 1 AM sin darnos cuenta.</p>
-                </div>
-                <div class="timeline-card-drag">
-                    <h3>🎂 31 de Julio, 2025</h3>
-                    <p>Tu cumpleaños. El día que te dije que quería un futuro contigo.</p>
-                </div>
-                <div class="timeline-card-drag">
-                    <h3>❤️ 2 de Agosto, 2025</h3>
-                    <p>El primer "Te Amo". Las palabras más sinceras que he dicho.</p>
-                </div>
-                <div class="timeline-card-drag">
-                    <h3>💕 Hasta Hoy</h3>
-                    <p>Cada día contigo es un regalo. Cada "buenos días preciosa" es una promesa.</p>
-                </div>
+        <h2 class="section-title">Nuestra Línea del Tiempo</h2>
+        <p style="text-align: center; font-size: 1.3rem; opacity: 0.8; margin-bottom: 60px;">Navega por nuestros momentos especiales</p>
+        <div style="max-width: 800px; margin: 0 auto;">
+            
+            <!-- Evento 1 -->
+            <div class="timeline-card-vertical" id="timeline1" style="background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); padding: 40px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1); margin-bottom: 30px;">
+                <h3 style="font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 15px; color: var(--primary);">📱 13 de Julio, 2025</h3>
+                <h4 style="font-size: 1.5rem; margin-bottom: 15px;">Todo Comenzó en Instagram</h4>
+                <p style="line-height: 1.8;">Todo comenzó en Instagram. Un DM que cambiaría nuestras vidas para siempre.</p>
+                <button onclick="scrollToTimeline(2)" style="margin-top: 20px; padding: 12px 30px; background: linear-gradient(135deg, var(--primary), var(--accent)); border: none; border-radius: 50px; color: white; cursor: pointer; font-weight: 600; transition: all 0.3s ease;">
+                    Siguiente →
+                </button>
             </div>
+
+            <!-- Evento 2 -->
+            <div class="timeline-card-vertical" id="timeline2" style="background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); padding: 40px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1); margin-bottom: 30px;">
+                <h3 style="font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 15px; color: var(--primary);">💬 28 de Julio, 2025</h3>
+                <h4 style="font-size: 1.5rem; margin-bottom: 15px;">El Primer "Holiiii"</h4>
+                <p style="line-height: 1.8;">"Holiiii" - El primer mensaje en WhatsApp. Hablamos hasta la 1 AM sin darnos cuenta.</p>
+                <button onclick="scrollToTimeline(3)" style="margin-top: 20px; padding: 12px 30px; background: linear-gradient(135deg, var(--primary), var(--accent)); border: none; border-radius: 50px; color: white; cursor: pointer; font-weight: 600; transition: all 0.3s ease;">
+                    Siguiente →
+                </button>
+            </div>
+
+            <!-- Evento 3 -->
+            <div class="timeline-card-vertical" id="timeline3" style="background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); padding: 40px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1); margin-bottom: 30px;">
+                <h3 style="font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 15px; color: var(--primary);">🎂 31 de Julio, 2025</h3>
+                <h4 style="font-size: 1.5rem; margin-bottom: 15px;">Tu Cumpleaños</h4>
+                <p style="line-height: 1.8;">Tu cumpleaños. El día que te dije que quería un futuro contigo.</p>
+                <button onclick="scrollToTimeline(4)" style="margin-top: 20px; padding: 12px 30px; background: linear-gradient(135deg, var(--primary), var(--accent)); border: none; border-radius: 50px; color: white; cursor: pointer; font-weight: 600; transition: all 0.3s ease;">
+                    Siguiente →
+                </button>
+            </div>
+
+            <!-- Evento 4 -->
+            <div class="timeline-card-vertical" id="timeline4" style="background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); padding: 40px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1); margin-bottom: 30px;">
+                <h3 style="font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 15px; color: var(--primary);">❤️ 2 de Agosto, 2025</h3>
+                <h4 style="font-size: 1.5rem; margin-bottom: 15px;">El Primer "Te Amo"</h4>
+                <p style="line-height: 1.8;">El primer "Te Amo". Las palabras más sinceras que he dicho.</p>
+                <button onclick="scrollToTimeline(5)" style="margin-top: 20px; padding: 12px 30px; background: linear-gradient(135deg, var(--primary), var(--accent)); border: none; border-radius: 50px; color: white; cursor: pointer; font-weight: 600; transition: all 0.3s ease;">
+                    Siguiente →
+                </button>
+            </div>
+
+            <!-- Evento 5 -->
+            <div class="timeline-card-vertical" id="timeline5" style="background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); padding: 40px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1); margin-bottom: 30px;">
+                <h3 style="font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 15px; color: var(--primary);">💕 Hasta Hoy</h3>
+                <h4 style="font-size: 1.5rem; margin-bottom: 15px;">Cada Día Contigo</h4>
+                <p style="line-height: 1.8;">Cada día contigo es un regalo. Cada "buenos días preciosa" es una promesa.</p>
+                <button onclick="document.querySelector('.letters-section').scrollIntoView({ behavior: 'smooth' })" style="margin-top: 20px; padding: 12px 30px; background: linear-gradient(135deg, #2ecc71, #27ae60); border: none; border-radius: 50px; color: white; cursor: pointer; font-weight: 600; transition: all 0.3s ease;">
+                    Continuar ✨
+                </button>
+            </div>
+
         </div>
     </section>
+
+    <script>
+        function scrollToTimeline(number) {
+            const element = document.getElementById('timeline' + number);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+    </script>
 
     <!-- Cartas que se Abren -->
     <section class="letters-section">
@@ -882,7 +868,7 @@
                 <div class="envelope">
                     <div class="envelope-flap"></div>
                     <div class="letter-content">
-                        <p>Mi amor, cada día que pasa me doy cuenta de lo afortunado que soy de tenerte. Tu sonrisa ilumina mis días más oscuros y tu voz es la melodía que quiero escuchar siempre. Te amo infinitamente.</p>
+                        <p style="font-size: 1.2rem; line-height: 2;">Mi amor, cada día que paso me doy cuenta de lo afortunado que soy de tenerte. Tu sonrisa ilumina mis días más oscuros y tu voz es la melodía que quiero escuchar siempre. Te amo infinitamente.</p>
                     </div>
                 </div>
             </div>
@@ -890,7 +876,7 @@
                 <div class="envelope">
                     <div class="envelope-flap"></div>
                     <div class="letter-content">
-                        <p>Joss, eres esa persona con la que he coincidido en demasiadas cosas. Contigo quiero hacer las cosas bien porque de verdad vales la pena. Gracias por ser tú, por ser real, por ser mi todo.</p>
+                        <p style="font-size: 1.2rem; line-height: 2;">Joss, eres esa persona con la que he coincidido en demasiadas cosas. Contigo quiero hacer las cosas bien porque de verdad vales la pena. Gracias por ser tú, por ser real, por ser mi todo.</p>
                     </div>
                 </div>
             </div>
@@ -898,7 +884,7 @@
                 <div class="envelope">
                     <div class="envelope-flap"></div>
                     <div class="letter-content">
-                        <p>Cuando me preguntas "¿Ya desayunaste?" o "¿Cómo amaneciste?", me haces sentir especial. Esos pequeños detalles son los que me enamoran más de ti cada día. Te quiero muchísimo.</p>
+                        <p style="font-size: 1.2rem; line-height: 2;">Cuando me preguntas "¿Ya desayunaste?" o "¿Cómo amaneciste?", me haces sentir especial. Esos pequeños detalles son los que me enamoran más de ti cada día. Te quiero muchísimo.</p>
                     </div>
                 </div>
             </div>
@@ -906,7 +892,7 @@
                 <div class="envelope">
                     <div class="envelope-flap"></div>
                     <div class="letter-content">
-                        <p>Esta presentación es solo un pequeño reflejo de todo lo que siento por ti. No hay palabras suficientes para describir lo que provocas en mi corazón. Eres mi para siempre. 💕</p>
+                        <p style="font-size: 1.2rem; line-height: 2;">Esta presentación es solo un pequeño reflejo de todo lo que siento por ti. No hay palabras suficientes para describir lo que provocas en mi corazón. Eres mi para siempre. 💕</p>
                     </div>
                 </div>
             </div>
@@ -937,20 +923,7 @@
         </div>
     </section>
 
-    <!-- Music Player -->
-    <div class="music-player" id="musicPlayer">
-        <div class="music-track-name">Nuestra Canción 💕</div>
-        <div class="music-controls">
-            <button class="music-btn" onclick="toggleMusic()">
-                <span id="playIcon">▶️</span>
-            </button>
-            <button class="music-btn" onclick="toggleMusicPlayer()">
-                <span>_</span>
-            </button>
-        </div>
-    </div>
-
-    <script>
+    <!-- QUIZ INTERACTIVO -->
         // ==================== LOADER ====================
         window.addEventListener('load', () => {
             setTimeout(() => {
@@ -1146,34 +1119,6 @@
             }, msg.delay * 1000);
         });
 
-        // ==================== DRAGGABLE TIMELINE ====================
-        const timelineDrag = document.getElementById('timelineDrag');
-        const timelineTrack = document.getElementById('timelineTrack');
-        let isDragging = false;
-        let startX, scrollLeft;
-
-        timelineDrag.addEventListener('mousedown', (e) => {
-            isDragging = true;
-            startX = e.pageX - timelineDrag.offsetLeft;
-            scrollLeft = timelineDrag.scrollLeft;
-        });
-
-        timelineDrag.addEventListener('mouseleave', () => {
-            isDragging = false;
-        });
-
-        timelineDrag.addEventListener('mouseup', () => {
-            isDragging = false;
-        });
-
-        timelineDrag.addEventListener('mousemove', (e) => {
-            if (!isDragging) return;
-            e.preventDefault();
-            const x = e.pageX - timelineDrag.offsetLeft;
-            const walk = (x - startX) * 2;
-            timelineDrag.scrollLeft = scrollLeft - walk;
-        });
-
         // ==================== CERTIFICATE PDF ====================
         function downloadCertificate() {
             const { jsPDF } = window.jspdf;
@@ -1198,19 +1143,6 @@
             doc.text('Con todo mi amor, Cesar G. ❤️', 105, 220, { align: 'center' });
             
             doc.save('Certificado_de_Amor.pdf');
-        }
-
-        // ==================== MUSIC PLAYER ====================
-        let musicPlaying = false;
-        function toggleMusic() {
-            musicPlaying = !musicPlaying;
-            const icon = document.getElementById('playIcon');
-            icon.textContent = musicPlaying ? '⏸️' : '▶️';
-            // Aquí puedes integrar música real
-        }
-
-        function toggleMusicPlayer() {
-            document.getElementById('musicPlayer').classList.toggle('minimized');
         }
 
         // ==================== START JOURNEY ====================
@@ -1397,26 +1329,85 @@
             <p style="font-size: 1.3rem; opacity: 0.8;">Pasa el cursor sobre cada tarjeta</p>
         </div>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; max-width: 1200px; margin: 0 auto;">
-            ${[
-                { num: '01', title: 'Tu Forma de Ser', text: 'Desde el primer día me dijiste "para ti nunca" cuando pensé que estabas ocupada. Ese detalle me hizo darme cuenta de lo especial que eres.' },
-                { num: '02', title: 'Cómo Me Haces Sentir', text: '"Me encantass más a mii, te amoo mucho niño lindo" - cada mensaje tuyo me hace sentir el hombre más afortunado del mundo.' },
-                { num: '03', title: 'Tus Detalles', text: 'Preguntas "¿Ya desayunaste?", "¿Cómo amaneciste?" - esos pequeños detalles que demuestran cuánto te importo.' },
-                { num: '04', title: 'Tu Sinceridad', text: 'Siempre tratando de expresar todo lo que sientes. Tu honestidad y transparencia son cosas que admiro profundamente.' },
-                { num: '05', title: 'Nuestra Conexión', text: 'Eres de las pocas personas con las que he coincidido en demasiadas cosas. Hablamos hasta el amanecer sin darnos cuenta.' },
-                { num: '06', title: 'Nuestro Futuro', text: 'Desde el día de tu cumpleaños supe que quiero un futuro contigo. Contigo quiero hacer las cosas bien.' }
-            ].map(card => `
-                <div style="height: 400px; perspective: 1000px; cursor: pointer;" onmouseenter="this.querySelector('.flip-inner').style.transform='rotateY(180deg)'" onmouseleave="this.querySelector('.flip-inner').style.transform='rotateY(0)'">
-                    <div class="flip-inner" style="position: relative; width: 100%; height: 100%; transition: transform 0.8s; transform-style: preserve-3d;">
-                        <div style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 20px; background: linear-gradient(135deg, #ff6b9d, #c06c84); display: flex; align-items: center; justify-content: center; font-size: 5rem; color: white; opacity: 0.8;">
-                            ${card.num}
-                        </div>
-                        <div style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 20px; background: linear-gradient(135deg, #667eea, #764ba2); transform: rotateY(180deg); padding: 30px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
-                            <h3 style="font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 20px;">${card.title}</h3>
-                            <p style="font-size: 1.1rem; line-height: 1.8;">${card.text}</p>
-                        </div>
+            
+            <!-- Card 1 -->
+            <div style="height: 400px; perspective: 1000px; cursor: pointer;" onmouseenter="this.querySelector('.flip-inner').style.transform='rotateY(180deg)'" onmouseleave="this.querySelector('.flip-inner').style.transform='rotateY(0)'">
+                <div class="flip-inner" style="position: relative; width: 100%; height: 100%; transition: transform 0.8s; transform-style: preserve-3d;">
+                    <div style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 20px; background: linear-gradient(135deg, #ff6b9d, #c06c84); display: flex; align-items: center; justify-content: center; font-size: 5rem; color: white; opacity: 0.8;">
+                        01
+                    </div>
+                    <div style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 20px; background: linear-gradient(135deg, #667eea, #764ba2); transform: rotateY(180deg); padding: 30px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+                        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 20px;">Tu Forma de Ser</h3>
+                        <p style="font-size: 1.1rem; line-height: 1.8;">Desde el primer día me dijiste "para ti nunca" cuando pensé que estabas ocupada. Ese detalle me hizo darme cuenta de lo especial que eres.</p>
                     </div>
                 </div>
-            `).join('')}
+            </div>
+
+            <!-- Card 2 -->
+            <div style="height: 400px; perspective: 1000px; cursor: pointer;" onmouseenter="this.querySelector('.flip-inner').style.transform='rotateY(180deg)'" onmouseleave="this.querySelector('.flip-inner').style.transform='rotateY(0)'">
+                <div class="flip-inner" style="position: relative; width: 100%; height: 100%; transition: transform 0.8s; transform-style: preserve-3d;">
+                    <div style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 20px; background: linear-gradient(135deg, #ff6b9d, #c06c84); display: flex; align-items: center; justify-content: center; font-size: 5rem; color: white; opacity: 0.8;">
+                        02
+                    </div>
+                    <div style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 20px; background: linear-gradient(135deg, #667eea, #764ba2); transform: rotateY(180deg); padding: 30px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+                        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 20px;">Cómo Me Haces Sentir</h3>
+                        <p style="font-size: 1.1rem; line-height: 1.8;">"Me encantass más a mii, te amoo mucho niño lindo" - cada mensaje tuyo me hace sentir el hombre más afortunado del mundo.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div style="height: 400px; perspective: 1000px; cursor: pointer;" onmouseenter="this.querySelector('.flip-inner').style.transform='rotateY(180deg)'" onmouseleave="this.querySelector('.flip-inner').style.transform='rotateY(0)'">
+                <div class="flip-inner" style="position: relative; width: 100%; height: 100%; transition: transform 0.8s; transform-style: preserve-3d;">
+                    <div style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 20px; background: linear-gradient(135deg, #ff6b9d, #c06c84); display: flex; align-items: center; justify-content: center; font-size: 5rem; color: white; opacity: 0.8;">
+                        03
+                    </div>
+                    <div style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 20px; background: linear-gradient(135deg, #667eea, #764ba2); transform: rotateY(180deg); padding: 30px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+                        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 20px;">Tus Detalles</h3>
+                        <p style="font-size: 1.1rem; line-height: 1.8;">Preguntas "¿Ya desayunaste?", "¿Cómo amaneciste?" - esos pequeños detalles que demuestran cuánto te importo.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 4 -->
+            <div style="height: 400px; perspective: 1000px; cursor: pointer;" onmouseenter="this.querySelector('.flip-inner').style.transform='rotateY(180deg)'" onmouseleave="this.querySelector('.flip-inner').style.transform='rotateY(0)'">
+                <div class="flip-inner" style="position: relative; width: 100%; height: 100%; transition: transform 0.8s; transform-style: preserve-3d;">
+                    <div style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 20px; background: linear-gradient(135deg, #ff6b9d, #c06c84); display: flex; align-items: center; justify-content: center; font-size: 5rem; color: white; opacity: 0.8;">
+                        04
+                    </div>
+                    <div style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 20px; background: linear-gradient(135deg, #667eea, #764ba2); transform: rotateY(180deg); padding: 30px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+                        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 20px;">Tu Sinceridad</h3>
+                        <p style="font-size: 1.1rem; line-height: 1.8;">Siempre tratando de expresar todo lo que sientes. Tu honestidad y transparencia son cosas que admiro profundamente.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 5 -->
+            <div style="height: 400px; perspective: 1000px; cursor: pointer;" onmouseenter="this.querySelector('.flip-inner').style.transform='rotateY(180deg)'" onmouseleave="this.querySelector('.flip-inner').style.transform='rotateY(0)'">
+                <div class="flip-inner" style="position: relative; width: 100%; height: 100%; transition: transform 0.8s; transform-style: preserve-3d;">
+                    <div style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 20px; background: linear-gradient(135deg, #ff6b9d, #c06c84); display: flex; align-items: center; justify-content: center; font-size: 5rem; color: white; opacity: 0.8;">
+                        05
+                    </div>
+                    <div style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 20px; background: linear-gradient(135deg, #667eea, #764ba2); transform: rotateY(180deg); padding: 30px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+                        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 20px;">Nuestra Conexión</h3>
+                        <p style="font-size: 1.1rem; line-height: 1.8;">Eres de las pocas personas con las que he coincidido en demasiadas cosas. Hablamos hasta el amanecer sin darnos cuenta.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 6 -->
+            <div style="height: 400px; perspective: 1000px; cursor: pointer;" onmouseenter="this.querySelector('.flip-inner').style.transform='rotateY(180deg)'" onmouseleave="this.querySelector('.flip-inner').style.transform='rotateY(0)'">
+                <div class="flip-inner" style="position: relative; width: 100%; height: 100%; transition: transform 0.8s; transform-style: preserve-3d;">
+                    <div style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 20px; background: linear-gradient(135deg, #ff6b9d, #c06c84); display: flex; align-items: center; justify-content: center; font-size: 5rem; color: white; opacity: 0.8;">
+                        06
+                    </div>
+                    <div style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 20px; background: linear-gradient(135deg, #667eea, #764ba2); transform: rotateY(180deg); padding: 30px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+                        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 20px;">Nuestro Futuro</h3>
+                        <p style="font-size: 1.1rem; line-height: 1.8;">Desde el día de tu cumpleaños supe que quiero un futuro contigo. Contigo quiero hacer las cosas bien.</p>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </section>
 
